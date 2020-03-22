@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CaseData } from './case-data.to';
+import { CountyData } from './county-data.to';
 import { CaseDataService } from './case-data.service';
 import { CountyDataService } from './county-data.service';
 

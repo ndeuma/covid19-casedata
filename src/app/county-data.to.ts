@@ -1,4 +1,4 @@
-interface CountyData {    
+export interface CountyData {    
     name: string;
     slug: string;
     ags: number;

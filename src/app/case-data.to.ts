@@ -1,4 +1,4 @@
-interface CaseData {
+export interface CaseData {
     infected_total: number;
     deaths_total: number;
     intensive_total: number;
