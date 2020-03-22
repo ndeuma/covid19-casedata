@@ -8,7 +8,7 @@ import { CountyData } from './county-data.to';
 })
 export class CountyDataService {
 
-    private readonly HOST = "http://localhost:8080"
+    private readonly HOST = "https://covid19-api-backend.herokuapp.com"
 
     private readonly API = "/api/v0.1"
 
