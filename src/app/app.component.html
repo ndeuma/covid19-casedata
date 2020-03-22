@@ -1,31 +1,35 @@
-<div class="content" role="main">
-  <header>    
-    <h1>Landkreis Emmendingen<i class="fas fa-sign-out-alt"></i></h1>
-  </header>
-  <h1><em>100</em> von deutschlandweit 16.662</h1>
-  <div class="case-stats">
-    <div class="case-stat-cell male">
-      <i class="fas fa-mars"></i><em>40%</em>
+<ng-container *ngIf="caseData$ | async as caseData">
+  <ng-container *ngIf="countyData$ | async as countyData">
+    <div class="content" role="main">
+      <header>    
+        <h1>Landkreis {{countyData.name}}<i class="fas fa-sign-out-alt"></i></h1>
+      </header>
+      <h1><em>{{caseData.infected_total}}</em> von deutschlandweit 16.662</h1>
+      <div class="case-stats">
+        <div class="case-stat-cell male">
+          <i class="fas fa-mars"></i><em>40%</em>
+        </div>
+        <div class="case-stat-cell female">
+          <i class="fas fa-venus"></i><em>60%</em>
+        </div>
+        <div class="case-stat-cell deaths">
+          <i class="fas fa-cross"></i><em>{{caseData.deaths_total}}</em>
+        </div>
+      </div>
+      <div class="chart case-history">
+        <h1><em>9</em> neue Fälle am 20.03.2020</h1>
+        <div class="chart-data">
+          Case History chart goes here
+        </div>    
+      </div>
+      <div class="chart case-history">
+        <h1>Infektionen nach Alter</h1>
+        <div class="chart-data">
+          Age Distribution chart goes here
+        </div>
+      </div>
     </div>
-    <div class="case-stat-cell female">
-      <i class="fas fa-venus"></i><em>60%</em>
-    </div>
-    <div class="case-stat-cell deaths">
-      <i class="fas fa-cross"></i><em>4</em>
-    </div>
-  </div>
-  <div class="chart case-history">
-    <h1><em>9</em> neue Fälle am 20.03.2020</h1>
-    <div class="chart-data">
-      Case History chart goes here
-    </div>    
-  </div>
-  <div class="chart case-history">
-    <h1><em>9</em> neue Fälle am 20.03.2020</h1>
-    <div class="chart-data">
-      Age Distribution chart goes here
-    </div>
-  </div>
-</div>
+  </ng-container>  
+</ng-container>
 
 <router-outlet></router-outlet>
