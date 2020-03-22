@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { CaseData } from './case-data.to';
 
 
@@ -8,16 +9,15 @@ import { CaseData } from './case-data.to';
 })
 export class CaseDataService {
     
-    constructor() { }
+    private readonly HOST = "http://localhost:8080"
+
+    private readonly API = "/api/v0.1"
+
+    private readonly ENDPOINT = "/county/EM/cases/"
+
+    constructor(private readonly http: HttpClient) { }
 
     getCaseData(): Observable<CaseData> {
-        return of({
-            infected_total: 100,
-            deaths_total: 4,
-            intensive_total: 11,
-            immune_total: 19,
-            date_day: "2020-03-22",
-            last_updated: "2020-03-22T15:35:48.497Z"
-        });
+        return this.http.get(`${this.HOST}${this.API}${this.ENDPOINT}`) as Observable<CaseData>;        
     }
 }

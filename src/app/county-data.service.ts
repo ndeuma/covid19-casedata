@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { CountyData } from './county-data.to';
 
 @Injectable({
     providedIn: "root"
 })
 export class CountyDataService {
+
+    private readonly HOST = "http://localhost:8080"
+
+    private readonly API = "/api/v0.1"
+
+    private readonly ENDPOINT = "/county/EM/"
     
-    constructor() { }
+    constructor(private readonly http: HttpClient) { }
 
     getCountyData(): Observable<CountyData> {
-        return of({
-            name: "Emmendingen",
-            slug: "EM",
-            ags: 35667,
-            state: "Baden-Württemberg",
-            alternative_name: "",
-            description: "",
-            population: 165383,
-            population_density: 243
-        });
+        return this.http.get(`${this.HOST}${this.API}${this.ENDPOINT}`) as Observable<CountyData>;       
     }
 }
