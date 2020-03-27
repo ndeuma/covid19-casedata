@@ -1,10 +1,11 @@
 export interface CountyData {    
-    name: string;
-    slug: string;
-    ags: number;
+    name: string;    
+    ags: string;
     state: string;
-    alternative_name: string;
-    description: string;
+    bez: string;
+    gen: string;    
     population: number;
-    population_density: number;
+    population_density_km: number;
+    population_male: number;
+    population_female: number;
 }

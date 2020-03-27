@@ -3,13 +3,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
+import { CountiesComponent } from './counties.component';
+import { CountyDetailComponent } from './county/county-detail.component';
+import { CountyService } from './county.service';
 import { AppComponent } from './app.component';
-import { CaseDataService } from './case-data.service';
-import { CountyDataService } from './county-data.service';
+import { CountiesResolver } from './counties-resolver.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CountiesComponent,
+    CountyDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -17,9 +21,11 @@ import { CountyDataService } from './county-data.service';
     AppRoutingModule
   ],
   providers: [
-    CaseDataService,
-    CountyDataService
+    CountiesResolver,
+    CountyService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }

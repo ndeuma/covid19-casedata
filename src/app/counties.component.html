@@ -1,0 +1,10 @@
+<h1>Übersicht</h1>
+<ng-container *ngIf="counties$ | async as counties">    
+    <ul>
+        <li *ngFor="let county of counties">
+            <a [routerLink]="[county.ags]" [state]="county">{{county.gen}} ({{county.bez}})</a>
+        </li>
+    </ul>
+</ng-container>
+
+
