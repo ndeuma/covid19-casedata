@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { CountyDetail } from './county-detail';
 import { Chart } from "chart.js";
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 @Component({
     selector: "casedata-age-distribution-chart",
@@ -18,9 +19,15 @@ export class AgeDistributionChartComponent implements OnInit {
             data: {
                 labels: this.countyDetail.age_groups.map(a => a.range),
                 datasets: [{
-                    label: 'Fälle',
-                    data: this.countyDetail.age_groups.map(h => h.infected_total),
+                    label: 'männlich',
+                    data: this.countyDetail.age_groups.map(h => h.infected_male),
                     backgroundColor: this.countyDetail.age_groups.map(h => "#0080ff"),
+                    borderColor: this.countyDetail.age_groups.map(h => "#a0a0a0"),                        
+                    borderWidth: 1
+                }, {
+                    label: 'weiblich',
+                    data: this.countyDetail.age_groups.map(h => h.infected_female),
+                    backgroundColor: this.countyDetail.age_groups.map(h => "#20ff00"),
                     borderColor: this.countyDetail.age_groups.map(h => "#a0a0a0"),                        
                     borderWidth: 1
                 }]
@@ -32,10 +39,10 @@ export class AgeDistributionChartComponent implements OnInit {
                             beginAtZero: true
                         }
                     }]
-                },
+                },       
                 legend: {
-                    display: false
-                }
+                    position: "bottom"
+                }         
             }
         });        
     }

@@ -1,7 +1,13 @@
+import { NumberSymbol } from '@angular/common';
+
 export interface AgeGroup {
     range: string;
     infected_total: number;
     deaths_total: number;
+    infected_male: number;
+    infected_female: number;
+    deaths_male: number;
+    deaths_female: number;
 }
 
 export interface CaseHistory {

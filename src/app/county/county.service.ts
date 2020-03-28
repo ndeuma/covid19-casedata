@@ -103,17 +103,21 @@ export class CountyService {
     private getAgeGroups(demographics: DemographicData[]): AgeGroup[] {
         const infected_by_group = new Map();
         const dead_by_group = new Map();
+        const infected_by_group_male = new Map();
+        const dead_by_group_male = new Map();
+        const infected_by_group_female = new Map();
+        const dead_by_group_female = new Map();
         demographics.forEach(demographic => {
             const age_group = demographic.age_group;
-            if (infected_by_group.has(age_group)) {
-                infected_by_group.set(age_group, infected_by_group.get(age_group) + demographic.infected_total);
-            } else {
-                infected_by_group.set(age_group, demographic.infected_total);
+            this.updateMap(infected_by_group, age_group, demographic.infected_total);
+            this.updateMap(dead_by_group, age_group, demographic.deaths_total);
+            if (demographic.gender === "m") {
+                this.updateMap(infected_by_group_male, age_group, demographic.infected_total);
+                this.updateMap(dead_by_group_male, age_group, demographic.deaths_total);
             }
-            if (dead_by_group.has(age_group)) {
-                dead_by_group.set(age_group, dead_by_group.get(age_group) + demographic.deaths_total);
-            } else {
-                dead_by_group.set(age_group, demographic.deaths_total);
+            if (demographic.gender === "w") {
+                this.updateMap(infected_by_group_female, age_group, demographic.infected_total);
+                this.updateMap(dead_by_group_female, age_group, demographic.deaths_total);
             }
         });                
         return this.PREDEFINED_AGE_GROUPS.map((p) => { 
@@ -121,7 +125,19 @@ export class CountyService {
                 range: p,
                 infected_total: infected_by_group.get(p) ?? 0,
                 deaths_total: dead_by_group.get(p) ?? 0,
+                infected_male: infected_by_group_male.get(p) ?? 0,
+                infected_female: infected_by_group_female.get(p) ?? 0,
+                deaths_male: dead_by_group_male.get(p) ?? 0,
+                deaths_female: dead_by_group_female.get(p) ?? 0,
             }
         });
+    }
+
+    private updateMap(map: any, age_group: string, value: number) {
+        if (map.has(age_group)) {
+            map.set(age_group, map.get(age_group) + value);
+        } else {
+            map.set(age_group, value);
+        }
     }
 }
