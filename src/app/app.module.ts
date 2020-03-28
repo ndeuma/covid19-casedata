@@ -12,6 +12,7 @@ import { CaseService } from './county/case.service';
 import { CasesResolver } from './county/cases-resolver.service';
 import { DemographicService } from './county/demographic.service';
 import { DemographicResolver } from './county/demographic-resolver.service';
+import { CountyResolver } from './county/county-resolver.service';
 
 @NgModule({
   declarations: [
@@ -25,11 +26,12 @@ import { DemographicResolver } from './county/demographic-resolver.service';
     AppRoutingModule
   ],
   providers: [
-    CountiesResolver,
-    CasesResolver,
     CountyService,
     CaseService,
     DemographicService,
+    CountiesResolver,
+    CountyResolver,
+    CasesResolver,
     DemographicResolver,
   ],
   bootstrap: [

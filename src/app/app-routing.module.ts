@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CountiesResolver } from './counties-resolver.service';
 import { CasesResolver } from './county/cases-resolver.service';
 import { DemographicResolver } from './county/demographic-resolver.service';
+import { CountyResolver } from './county/county-resolver.service';
 
 
 const routes: Routes = [  
@@ -22,7 +23,8 @@ const routes: Routes = [
     component: CountyDetailComponent,    
     resolve: {
       cases: CasesResolver,
-      demographics: DemographicResolver
+      demographics: DemographicResolver,
+      county: CountyResolver
     }
   }  
 ];

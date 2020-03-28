@@ -14,4 +14,8 @@ export class CountyService {
     getCounties(): Observable<CountyData[]> {
         return this.http.get<CountyData[]>(`${HOST}${API}/county/`);       
     }
+
+    getCounty(countyId: string): Observable<CountyData> {
+        return this.http.get<CountyData>(`${HOST}${API}/county/${countyId}/`);         
+    }
 }

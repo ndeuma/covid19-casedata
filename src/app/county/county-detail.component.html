@@ -1,4 +1,4 @@
-<div class="content" role="main" *ngIf="latest">
+<div class="content" role="main" *ngIf="county && latest">
   <header>    
     <h1>{{county.gen}} ({{county.bez}})&nbsp;<a [routerLink]="['/']"><i class="fas fa-sign-out-alt"></i></a></h1>
   </header>
@@ -27,3 +27,4 @@
     </div>
   </div>
 </div>
+

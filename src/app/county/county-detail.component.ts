@@ -13,8 +13,7 @@ import { Demographic } from './demographic.to';
     templateUrl: './county-detail.component.html',
     styleUrls: ['./county-detail.component.scss']    
 })
-export class CountyDetailComponent implements OnDestroy {
-    title = "COVID-19 Falldaten";
+export class CountyDetailComponent implements OnDestroy {    
 
     private subscription: Subscription;
 
@@ -31,9 +30,8 @@ export class CountyDetailComponent implements OnDestroy {
     latest_date: string;
 
     constructor(caseService: CaseService, route: ActivatedRoute, router: Router) {
-      this.county = router.getCurrentNavigation().extras.state as CountyData;
-
       this.subscription = route.data.subscribe(data => {
+        this.county = data.county;
         this.latest = data.cases[0];
         this.new_case_count = data.cases[0].infected_total - data.cases[1].infected_total;
         this.latest_date = data.cases[0].date_day; 
