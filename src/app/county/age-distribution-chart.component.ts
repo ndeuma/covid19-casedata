@@ -13,7 +13,7 @@ export class AgeDistributionChartComponent implements OnInit {
 
     ngOnInit(): void {
         const ctx = document.getElementById("ageDistributionChart");    
-        var myChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: this.countyDetail.age_groups.map(a => a.range),

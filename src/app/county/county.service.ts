@@ -6,8 +6,8 @@ import { CaseData } from './case-data.to';
 import { DemographicData } from './demographic-data.to';
 import { Observable, combineLatest, fromEvent } from 'rxjs';
 import { CountyDetail, AgeGroup, CaseHistory } from './county-detail';
-import { take, map, filter } from 'rxjs/operators';
-import { DatePipe, formatDate } from '@angular/common';
+import { map } from 'rxjs/operators';
+import { formatDate } from '@angular/common';
 
 @Injectable({
     providedIn: "root"

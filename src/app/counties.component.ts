@@ -1,9 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CountyData } from './county/county-data.to';
-import { CountyService } from './county/county.service';
-import { Observable, partition } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { map, groupBy } from 'rxjs/operators';
+import { Component } from '@angular/core';
 
 @Component({    
     selector: 'casedata-counties',

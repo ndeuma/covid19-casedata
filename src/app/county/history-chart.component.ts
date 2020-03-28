@@ -14,7 +14,7 @@ export class HistoryChartComponent implements OnInit {
     ngOnInit(): void {
         const ctx = document.getElementById("historyChart");
         const caseHistoryReversed = this.countyDetail.case_history.reverse();    
-        var myChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: caseHistoryReversed.map(h => h.date),
