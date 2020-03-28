@@ -10,16 +10,4 @@ import { map, groupBy } from 'rxjs/operators';
     templateUrl: './counties.component.html',
     styleUrls: ['./counties.component.scss']    
 })
-export class CountiesComponent {
-    
-    counties$: Observable<CountyData[]>;
-
-    constructor(route: ActivatedRoute) {        
-        this.counties$ = route.data.pipe(
-            map(data => data.counties),
-            map(counties => counties.sort((c1: CountyData, c2: CountyData) => 
-                c1.gen.localeCompare(c2.gen))
-            )
-        );
-    }
-}
+export class CountiesComponent { }

@@ -7,7 +7,6 @@ import { CountiesComponent } from './counties.component';
 import { CountyDetailComponent } from './county/county-detail.component';
 import { CountyService } from './county.service';
 import { AppComponent } from './app.component';
-import { CountiesResolver } from './counties-resolver.service';
 import { CaseService } from './county/case.service';
 import { CasesResolver } from './county/cases-resolver.service';
 import { DemographicService } from './county/demographic.service';
@@ -29,7 +28,6 @@ import { CountyResolver } from './county/county-resolver.service';
     CountyService,
     CaseService,
     DemographicService,
-    CountiesResolver,
     CountyResolver,
     CasesResolver,
     DemographicResolver,
