@@ -3,6 +3,7 @@
     <h1>{{county.gen}} ({{county.bez}})&nbsp;<a [routerLink]="['/']"><i class="fas fa-sign-out-alt"></i></a></h1>
   </header>
   <h1><em>{{latest.infected_total}}</em> Fälle</h1>
+  <p>bei einer Bevölkerung von <em>{{county.population}}</em> </p>
   <div class="case-stats">
     <div class="case-stat-cell male">
       <i class="fas fa-mars"></i><em>{{male_percentage}}%</em>
