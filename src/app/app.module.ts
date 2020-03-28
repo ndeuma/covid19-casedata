@@ -8,6 +8,10 @@ import { CountyDetailComponent } from './county/county-detail.component';
 import { CountyService } from './county.service';
 import { AppComponent } from './app.component';
 import { CountiesResolver } from './counties-resolver.service';
+import { CaseService } from './county/case.service';
+import { CasesResolver } from './county/cases-resolver.service';
+import { DemographicService } from './county/demographic.service';
+import { DemographicResolver } from './county/demographic-resolver.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,11 @@ import { CountiesResolver } from './counties-resolver.service';
   ],
   providers: [
     CountiesResolver,
-    CountyService
+    CasesResolver,
+    CountyService,
+    CaseService,
+    DemographicService,
+    DemographicResolver,
   ],
   bootstrap: [
     AppComponent

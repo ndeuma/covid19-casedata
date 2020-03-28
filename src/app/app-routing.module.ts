@@ -4,6 +4,8 @@ import { CountiesComponent } from './counties.component';
 import { CountyDetailComponent } from './county/county-detail.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CountiesResolver } from './counties-resolver.service';
+import { CasesResolver } from './county/cases-resolver.service';
+import { DemographicResolver } from './county/demographic-resolver.service';
 
 
 const routes: Routes = [  
@@ -16,8 +18,12 @@ const routes: Routes = [
     }
   },  
   { 
-    path: ":ags",
+    path: ":countyId",
     component: CountyDetailComponent,    
+    resolve: {
+      cases: CasesResolver,
+      demographics: DemographicResolver
+    }
   }  
 ];
 
