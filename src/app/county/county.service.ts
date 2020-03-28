@@ -4,9 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { CountyData } from './county-data.to';
 import { CaseData } from './case-data.to';
 import { DemographicData } from './demographic-data.to';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, fromEvent } from 'rxjs';
 import { CountyDetail, AgeGroup, CaseHistory } from './county-detail';
 import { take, map, filter } from 'rxjs/operators';
+import { DatePipe, formatDate } from '@angular/common';
 
 @Injectable({
     providedIn: "root"
@@ -40,7 +41,7 @@ export class CountyService {
                     name: county.name,
                     county_id: county.ags,
                     population: county.population,
-                    latest_report_date: cases[0].date_day,
+                    latest_report_date: formatDate(cases[0].date_day, "dd.MM.yy", "de_DE"),
                     infected_total: cases[0].infected_total,
                     deaths_total: cases[0].deaths_total,
                     new_cases: cases[0].infected_total - cases[1].infected_total,
@@ -77,9 +78,10 @@ export class CountyService {
     private getCaseHistory(cases: CaseData[]): CaseHistory[] {
         const result = [];
         for (let i = 0; i < cases.length; i++) {
-            if (i == cases.length - 1) {
+            const formattedDate = formatDate(cases[i].date_day, "dd.MM", "de_DE");
+            if (i == cases.length - 1) {                
                 result.push({
-                    date: cases[i].date_day,
+                    date: formattedDate,
                     infected_total: cases[i].infected_total,
                     infected_increment: 0,
                     deaths_total: cases[i].deaths_total,
@@ -87,7 +89,7 @@ export class CountyService {
                 });
             } else {
                 result.push({
-                    date: cases[i].date_day,
+                    date: formattedDate,
                     infected_total: cases[i].infected_total,
                     infected_increment: cases[i].infected_total - cases[i + 1].infected_total,
                     deaths_total: cases[i].deaths_total,

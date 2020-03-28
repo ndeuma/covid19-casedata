@@ -7,15 +7,19 @@ import { CountiesComponent } from './counties.component';
 import { CountyDetailComponent } from './county/county-detail.component';
 import { CountyService } from './county/county.service';
 import { CountyDetailResolver } from './county/county-detail-resolver.service';
+import { HistoryChartComponent } from './county/history-chart.component';
 import { AppComponent } from './app.component';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { AgeDistributionChartComponent } from './county/age-distribution-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CountiesComponent,
-    CountyDetailComponent
+    CountyDetailComponent,
+    HistoryChartComponent,
+    AgeDistributionChartComponent
   ],
   imports: [
     BrowserModule,

@@ -16,27 +16,15 @@
     </div>
   </div>
   <div class="chart case-history">
-    <h1><em>{{countyDetail.new_cases}}</em> neue Fälle am {{countyDetail.latest_report_date | date:'dd.MM.yyyy' }}</h1>
+    <h1><em>{{countyDetail.new_cases}}</em> neue Fälle am {{countyDetail.latest_report_date }}</h1>
     <div class="chart-data">
-      <ul>
-        <li *ngFor="let caseHistory of countyDetail.case_history;">
-          {{caseHistory.date | date:'dd.MM.yyyy' }}: 
-          <em>{{caseHistory.infected_total | number:'.0':'de-DE' }}</em> Fälle (+{{caseHistory.infected_increment | number:'.0':'de-DE' }}), 
-          <em>{{caseHistory.deaths_total | number:'.0':'de-DE' }}</em> Todesfälle (+{{caseHistory.deaths_increment | number:'.0':'de-DE' }})
-        </li>
-      </ul>
-    </div>    
+      <casedata-history-chart [countyDetail]="countyDetail"></casedata-history-chart>       
+    </div>        
   </div>
   <div class="chart case-history">
     <h1>Fälle nach Alter</h1>
     <div class="chart-data">
-      <ul>
-        <li *ngFor="let ageGroup of countyDetail.age_groups;">
-          {{ageGroup.range}}: 
-          <em>{{ageGroup.infected_total | number:'.0':'de-DE' }}</em> Fälle, 
-          <em>{{ageGroup.deaths_total | number:'.0':'de-DE' }}</em> Todesfälle
-        </li>
-      </ul>
+      <casedata-age-distribution-chart [countyDetail]="countyDetail"></casedata-age-distribution-chart>             
     </div>
   </div>
 </div>
