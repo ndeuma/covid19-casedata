@@ -20,18 +20,18 @@
     <div class="chart-data">
       <ul>
         <li *ngFor="let caseHistory of countyDetail.case_history;">
-          {{caseHistory.date}}: <em>{{caseHistory.infected_total}}</em> Infektionen (+{{caseHistory.infected_increment}}), 
+          {{caseHistory.date}}: <em>{{caseHistory.infected_total}}</em> Fälle (+{{caseHistory.infected_increment}}), 
           <em>{{caseHistory.deaths_total}}</em> Todesfälle (+{{caseHistory.deaths_increment}})
         </li>
       </ul>
     </div>    
   </div>
   <div class="chart case-history">
-    <h1>Infektionen nach Alter</h1>
+    <h1>Fälle nach Alter</h1>
     <div class="chart-data">
       <ul>
         <li *ngFor="let ageGroup of countyDetail.age_groups;">
-          {{ageGroup.range}}: <em>{{ageGroup.infected_total}}</em> Infektionen, <em>{{ageGroup.deaths_total}}</em> Todesfälle
+          {{ageGroup.range}}: <em>{{ageGroup.infected_total}}</em> Fälle, <em>{{ageGroup.deaths_total}}</em> Todesfälle
         </li>
       </ul>
     </div>
