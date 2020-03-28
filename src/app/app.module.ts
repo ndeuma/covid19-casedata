@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { CountiesComponent } from './counties.component';
 import { CountyDetailComponent } from './county/county-detail.component';
@@ -28,7 +28,8 @@ import localeDe from '@angular/common/locales/de';
   ],
   providers: [
     CountyService,    
-    CountyDetailResolver,    
+    CountyDetailResolver,  
+    {provide: LocationStrategy, useClass: HashLocationStrategy}  
   ],
   bootstrap: [
     AppComponent
