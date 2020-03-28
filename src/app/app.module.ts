@@ -8,6 +8,8 @@ import { CountyDetailComponent } from './county/county-detail.component';
 import { CountyService } from './county/county.service';
 import { CountyDetailResolver } from './county/county-detail-resolver.service';
 import { AppComponent } from './app.component';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
 
 @NgModule({
   declarations: [
@@ -28,4 +30,8 @@ import { AppComponent } from './app.component';
     AppComponent
   ]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    registerLocaleData(localeDe, 'de');
+  }  
+}
