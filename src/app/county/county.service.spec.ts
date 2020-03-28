@@ -48,11 +48,11 @@ describe("County details...", () => {
             from([[]]),
             from([[]]),
         );  
-        countyDetail.subscribe(d => {
-            expect(d.infected_total).toEqual(0);
-            expect(d.deaths_total).toEqual(0);
-            expect(d.new_cases).toEqual(0);
-            expect(d.latest_report_date).toEqual("");
+        countyDetail.subscribe(actual => {
+            expect(actual.infected_total).toEqual(0);
+            expect(actual.deaths_total).toEqual(0);
+            expect(actual.new_cases).toEqual(0);
+            expect(actual.latest_report_date).toEqual("");
             done();
         })
     });
@@ -77,10 +77,10 @@ describe("County details...", () => {
                 last_updated: "2020-03-25",
             }]]),
         );  
-        countyDetail.subscribe(d => {
-            expect(d.infected_total).toEqual(100);
-            expect(d.deaths_total).toEqual(8);
-            expect(d.new_cases).toEqual(0);
+        countyDetail.subscribe(actual => {
+            expect(actual.infected_total).toEqual(100);
+            expect(actual.deaths_total).toEqual(8);
+            expect(actual.new_cases).toEqual(0);
             done();
         })
     });
