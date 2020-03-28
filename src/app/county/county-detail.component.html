@@ -18,7 +18,12 @@
   <div class="chart case-history">
     <h1><em>{{countyDetail.new_cases}}</em> neue Fälle am {{countyDetail.latest_report_date}}</h1>
     <div class="chart-data">
-      Case History chart goes here
+      <ul>
+        <li *ngFor="let caseHistory of countyDetail.case_history;">
+          {{caseHistory.date}}: <em>{{caseHistory.infected_total}}</em> Infektionen (+{{caseHistory.infected_increment}}), 
+          <em>{{caseHistory.deaths_total}}</em> Todesfälle (+{{caseHistory.deaths_increment}})
+        </li>
+      </ul>
     </div>    
   </div>
   <div class="chart case-history">

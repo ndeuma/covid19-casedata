@@ -5,7 +5,7 @@ import { CountyData } from './county-data.to';
 import { CaseData } from './case-data.to';
 import { DemographicData } from './demographic-data.to';
 import { Observable, combineLatest } from 'rxjs';
-import { CountyDetail, AgeGroup } from './county-detail';
+import { CountyDetail, AgeGroup, CaseHistory } from './county-detail';
 import { take, map, filter } from 'rxjs/operators';
 
 @Injectable({
@@ -46,6 +46,7 @@ export class CountyService {
                     new_cases: cases[0].infected_total - cases[1].infected_total,
                     male_percentage: this.getGenderPercentage(filtered_demographics, "m"),
                     female_percentage: this.getGenderPercentage(filtered_demographics, "w"),
+                    case_history: this.getCaseHistory(cases),
                     age_groups: this.getAgeGroups(filtered_demographics),
                 }
             })
@@ -71,6 +72,30 @@ export class CountyService {
             }            
         });
         return Math.round((infected_gender / infected_total) * 100);
+    }
+
+    private getCaseHistory(cases: CaseData[]): CaseHistory[] {
+        const result = [];
+        for (let i = 0; i < cases.length; i++) {
+            if (i == cases.length - 1) {
+                result.push({
+                    date: cases[i].date_day,
+                    infected_total: cases[i].infected_total,
+                    infected_increment: 0,
+                    deaths_total: cases[i].deaths_total,
+                    deaths_increment: 0,
+                });
+            } else {
+                result.push({
+                    date: cases[i].date_day,
+                    infected_total: cases[i].infected_total,
+                    infected_increment: cases[i].infected_total - cases[i + 1].infected_total,
+                    deaths_total: cases[i].deaths_total,
+                    deaths_increment: cases[i].deaths_total - cases[i + 1].deaths_total,
+                });
+            }
+        }
+        return result;
     }
 
     private getAgeGroups(demographics: DemographicData[]): AgeGroup[] {
