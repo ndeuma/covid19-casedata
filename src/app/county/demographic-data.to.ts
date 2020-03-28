@@ -1,4 +1,4 @@
-export interface Demographic {
+export interface DemographicData {
     infected_total: number;
     deaths_total: number;
     gender: string;

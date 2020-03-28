@@ -1,22 +1,22 @@
-<div class="content" role="main" *ngIf="county && latest">
+<div class="content" role="main" *ngIf="countyDetail$ | async as countyDetail">
   <header>    
-    <h1>{{county.gen}} ({{county.bez}})&nbsp;<a [routerLink]="['/']"><i class="fas fa-sign-out-alt"></i></a></h1>
+    <h1>{{countyDetail.name}}&nbsp;<a [routerLink]="['/']"><i class="fas fa-sign-out-alt"></i></a></h1>
   </header>
-  <h1><em>{{latest.infected_total}}</em> Fälle</h1>
-  <p>bei einer Bevölkerung von <em>{{county.population}}</em> </p>
+  <h1><em>{{countyDetail.infected_total}}</em> Fälle</h1>
+  <p>bei einer Bevölkerung von <em>{{countyDetail.population}}</em> </p>
   <div class="case-stats">
     <div class="case-stat-cell male">
-      <i class="fas fa-mars"></i><em>{{male_percentage}}%</em>
+      <i class="fas fa-mars"></i><em>{{countyDetail.male_percentage}}%</em>
     </div>
     <div class="case-stat-cell female">
-      <i class="fas fa-venus"></i><em>{{female_percentage}}%</em>
+      <i class="fas fa-venus"></i><em>{{countyDetail.female_percentage}}%</em>
     </div>
     <div class="case-stat-cell deaths">
-      <i class="fas fa-cross"></i><em>{{latest.deaths_total}}</em>
+      <i class="fas fa-cross"></i><em>{{countyDetail.deaths_total}}</em>
     </div>
   </div>
   <div class="chart case-history">
-    <h1><em>{{new_case_count}}</em> neue Fälle am {{latest_date}}</h1>
+    <h1><em>{{countyDetail.new_cases}}</em> neue Fälle am {{countyDetail.latest_report_date}}</h1>
     <div class="chart-data">
       Case History chart goes here
     </div>    
@@ -24,7 +24,11 @@
   <div class="chart case-history">
     <h1>Infektionen nach Alter</h1>
     <div class="chart-data">
-      Age Distribution chart goes here
+      <ul>
+        <li *ngFor="let ageGroup of countyDetail.age_groups;">
+          {{ageGroup.range}}: <em>{{ageGroup.infected_total}}</em> Infektionen, <em>{{ageGroup.deaths_total}}</em> Todesfälle
+        </li>
+      </ul>
     </div>
   </div>
 </div>

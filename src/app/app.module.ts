@@ -5,13 +5,9 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { CountiesComponent } from './counties.component';
 import { CountyDetailComponent } from './county/county-detail.component';
-import { CountyService } from './county.service';
+import { CountyService } from './county/county.service';
+import { CountyDetailResolver } from './county/county-detail-resolver.service';
 import { AppComponent } from './app.component';
-import { CaseService } from './county/case.service';
-import { CasesResolver } from './county/cases-resolver.service';
-import { DemographicService } from './county/demographic.service';
-import { DemographicResolver } from './county/demographic-resolver.service';
-import { CountyResolver } from './county/county-resolver.service';
 
 @NgModule({
   declarations: [
@@ -25,12 +21,8 @@ import { CountyResolver } from './county/county-resolver.service';
     AppRoutingModule
   ],
   providers: [
-    CountyService,
-    CaseService,
-    DemographicService,
-    CountyResolver,
-    CasesResolver,
-    DemographicResolver,
+    CountyService,    
+    CountyDetailResolver,    
   ],
   bootstrap: [
     AppComponent
