@@ -11,6 +11,12 @@ Demo: https://niklas-deutschmann.de/covid19/
 * `npm install`
 * `ng serve`
 
+There is a Bash script for deploying the application using SCP. If you want to deploy to `http://myserver.com/covid19`
+* Set the environment variable `CASEDATA_DEPLOY_HOST` to `myserver.com`
+* Set the environment variable `CASEDATA_DEPLOY_USER` to your SSH username on this server
+* Set the environment variable `CASEDATA_DEPLOY_DIR` to `covid19/`(trailing slash is important!)
+* Run `ng build --prod --base-href /covid19 --deploy-url /covid19/ && npm run deploy_scp` (positions of slashes are important!)
+
 ## Related Projects
 
 * [mojoaxel](https://github.com/mojoaxel): [covid19-risklayer-data](https://github.com/mojoaxel/covid19-risklayer-data), [DIVI-Intensivregister-data](https://github.com/mojoaxel/DIVI-Intensivregister-data) and [corona-data-germany](https://github.com/mojoaxel/corona-data-germany)
