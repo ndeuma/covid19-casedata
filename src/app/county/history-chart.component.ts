@@ -54,7 +54,16 @@ export class HistoryChartComponent implements OnInit {
                     }]
                 },
                 legend: {
-                    position: "bottom"
+                    position: "bottom",
+                    labels: {
+                        // Do no display "Todesfälle" in legend when there are no deaths
+                        filter: function(item, chart) {
+                            if (item.datasetIndex === 0 && chart.datasets[0].data.every((value) => value === 0)) {
+                                    return false;
+                            }
+                            return true;
+                        }
+                    }
                 },
                 tooltips: {
                     // https://stackoverflow.com/questions/43793622/how-to-remove-square-label-from-tooltip-and-make-its-information-in-one-line
