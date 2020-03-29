@@ -29,7 +29,7 @@ export class CountyService {
     getCountyDetail(countyId: string): Observable<CountyDetail> {
         const county_data = this.http.get<CountyData>(`${HOST}${API}/county/${countyId}/`);
         const case_data = this.http.get<CaseData[]>(`${HOST}${API}/county/${countyId}/cases/`)
-        const demographic_data = this.http.get<DemographicData[]>(`${HOST}${API}/county/${countyId}/gender_age/`);
+        const demographic_data = this.http.get<DemographicData[]>(`${HOST}${API}/county/${countyId}/gender_age/latest/`);
         return this.formatCountyDetail(county_data, case_data, demographic_data);
     }
 
@@ -37,7 +37,6 @@ export class CountyService {
     formatCountyDetail(county_data: Observable<CountyData>, case_data: Observable<CaseData[]>, demographic_data: Observable<DemographicData[]>): Observable<CountyDetail> {
         return combineLatest(county_data, case_data, demographic_data).pipe(
             map(([county, cases, demographics]) => { 
-                let filtered_demographics = this.filterByLatestDate(demographics);
                 const result = {                
                     name: county.gen + " (" + county.bez + ")",
                     county_id: county.ags,
@@ -48,10 +47,10 @@ export class CountyService {
                     incidence: undefined,
                     deaths_total: cases.length > 0 ? cases[0].deaths_total : 0,
                     new_cases: this.getNumberOfNewCases(cases),
-                    male_percentage: this.getGenderPercentage(filtered_demographics, "m"),
-                    female_percentage: this.getGenderPercentage(filtered_demographics, "w"),
+                    male_percentage: this.getGenderPercentage(demographics, "m"),
+                    female_percentage: this.getGenderPercentage(demographics, "w"),
                     case_history: this.getCaseHistory(cases),
-                    age_groups: this.getAgeGroups(filtered_demographics),
+                    age_groups: this.getAgeGroups(demographics),
                 }
                 result.infected_by_100k = Math.round((result.infected_total / result.population) * 100000);
                 result.incidence = this.getIncidence(result.infected_by_100k);
@@ -83,16 +82,6 @@ export class CountyService {
             case 1: return cases[0].infected_total;
             default: return cases[0].infected_total - cases[1].infected_total;
         }
-    }
-
-    private filterByLatestDate(demographics: DemographicData[]): DemographicData[] {
-        let latest = "";
-        demographics.forEach((demographic) => {
-            if (demographic.date_day.localeCompare(latest) > 0) {
-                latest = demographic.date_day;
-            }
-        });
-        return demographics.filter(demographic => demographic.date_day === latest);
     }
 
     private getGenderPercentage(demographics: DemographicData[], gender: string): number {
