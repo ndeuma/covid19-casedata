@@ -36,7 +36,13 @@ export class AgeDistributionChartComponent implements OnInit {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            // https://stackoverflow.com/questions/42135058/set-minimum-step-size-in-chart-js
+                            callback: function(value, index, values) {
+                                if (Math.floor(value) === value) {
+                                    return value;
+                                }
+                            }
                         }
                     }]
                 },       
