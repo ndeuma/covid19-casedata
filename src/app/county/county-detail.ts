@@ -18,12 +18,19 @@ export interface CaseHistory {
     deaths_increment: number;
 }
 
+export interface Incidence {
+    displayClass: string,
+    label: string;
+}
+
 export interface CountyDetail {
     name: string;
     county_id: string;
     population: number;
     latest_report_date: string;
     infected_total: number;
+    infected_by_100k: number | undefined;
+    incidence: Incidence | undefined;
     deaths_total: number;
     new_cases: number;
     male_percentage: number;

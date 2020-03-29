@@ -46,6 +46,40 @@ em {
     font-style: normal;
 }
 
+.incidence {
+    padding: 0px 3px;
+}
+
+.incidence.very-low {
+    color: #ffffff;
+    background-color: #006400,
+}
+
+.incidence.low {
+    color: #228b22;
+    background-color: #a0a0a0;
+}
+
+.incidence.medium {
+    color: #000000;
+    background-color: #a0a0a0;
+}
+
+.incidence.high {
+    color: #ff0000;
+    background-color: #a0a0a0;
+}
+
+.incidence.very-high {
+    color: #ffffff;
+    background-color: #8b0000;    
+}
+
+.incidence.extremely-high {
+    color: #ffffff;
+    background-color: #000000;    
+}
+
 .case-stats {
     width: 100%;
     display: flex;

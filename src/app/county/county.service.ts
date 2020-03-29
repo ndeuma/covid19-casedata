@@ -5,8 +5,8 @@ import { CountyData } from './county-data.to';
 import { CaseData } from './case-data.to';
 import { DemographicData } from './demographic-data.to';
 import { Observable, combineLatest, fromEvent } from 'rxjs';
-import { CountyDetail, AgeGroup, CaseHistory } from './county-detail';
-import { map } from 'rxjs/operators';
+import { CountyDetail, AgeGroup, CaseHistory, Incidence } from './county-detail';
+import { map, count } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
 
 @Injectable({
@@ -37,12 +37,14 @@ export class CountyService {
         return combineLatest(county_data, case_data, demographic_data).pipe(
             map(([county, cases, demographics]) => { 
                 let filtered_demographics = this.filterByLatestDate(demographics);
-                return {                
-                    name: county.name,
+                const result = {                
+                    name: county.gen + " (" + county.bez + ")",
                     county_id: county.ags,
                     population: county.population,
                     latest_report_date: cases.length > 0 ? formatDate(cases[0].date_day, "dd.MM.yy", "de_DE") : "",
-                    infected_total: cases.length > 0 ? cases[0].infected_total : 0,
+                    infected_total: cases.length > 0 ? cases[0].infected_total : 0,                    
+                    infected_by_100k: undefined,
+                    incidence: undefined,
                     deaths_total: cases.length > 0 ? cases[0].deaths_total : 0,
                     new_cases: this.getNumberOfNewCases(cases),
                     male_percentage: this.getGenderPercentage(filtered_demographics, "m"),
@@ -50,8 +52,28 @@ export class CountyService {
                     case_history: this.getCaseHistory(cases),
                     age_groups: this.getAgeGroups(filtered_demographics),
                 }
+                result.infected_by_100k = Math.round((result.infected_total / result.population) * 100000);
+                result.incidence = this.getIncidence(result.infected_by_100k);
+                return result;
             })
         );
+    }
+
+    getIncidence(infected_by_100k: number): Incidence {
+        // Incidence classification similar to corona.rki.de
+        if (infected_by_100k < 34) {
+            return { displayClass: "very-low", label: "sehr niedrig" };
+        } else if (infected_by_100k < 59) {
+            return { displayClass: "low", label: "niedrig" };
+        } else if (infected_by_100k < 93) {
+            return { displayClass: "medium", label: "mittel" }
+        } else if (infected_by_100k < 159) {
+            return { displayClass: "high", label: "hoch" }
+        } else if (infected_by_100k < 313) {
+            return { displayClass: "very-high", label: "sehr hoch" }
+        } else {
+            return { displayClass: "extremely-high", label: "extrem hoch" }
+        }
     }
 
     getNumberOfNewCases(cases: CaseData[]): number {
