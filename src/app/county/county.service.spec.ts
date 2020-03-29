@@ -80,7 +80,7 @@ describe("County details...", () => {
         countyDetail.subscribe(actual => {
             expect(actual.infected_total).toEqual(100);
             expect(actual.deaths_total).toEqual(8);
-            expect(actual.new_cases).toEqual(0);
+            expect(actual.new_cases).toEqual(100);
             done();
         })
     });

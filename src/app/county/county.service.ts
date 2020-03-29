@@ -41,18 +41,10 @@ export class CountyService {
                     name: county.name,
                     county_id: county.ags,
                     population: county.population,
-                    latest_report_date: cases.length > 0 
-                        ? formatDate(cases[0].date_day, "dd.MM.yy", "de_DE") 
-                        : "",
-                    infected_total: cases.length > 0 
-                        ? cases[0].infected_total
-                        : 0,
-                    deaths_total: cases.length > 0 
-                        ? cases[0].deaths_total
-                        : 0,
-                    new_cases: cases.length > 1 
-                        ? cases[0].infected_total - cases[1].infected_total 
-                        : 0,
+                    latest_report_date: cases.length > 0 ? formatDate(cases[0].date_day, "dd.MM.yy", "de_DE") : "",
+                    infected_total: cases.length > 0 ? cases[0].infected_total : 0,
+                    deaths_total: cases.length > 0 ? cases[0].deaths_total : 0,
+                    new_cases: this.getNumberOfNewCases(cases),
                     male_percentage: this.getGenderPercentage(filtered_demographics, "m"),
                     female_percentage: this.getGenderPercentage(filtered_demographics, "w"),
                     case_history: this.getCaseHistory(cases),
@@ -60,6 +52,14 @@ export class CountyService {
                 }
             })
         );
+    }
+
+    getNumberOfNewCases(cases: CaseData[]): number {
+        switch (cases.length) {
+            case 0: return 0;
+            case 1: return cases[0].infected_total;
+            default: return cases[0].infected_total - cases[1].infected_total;
+        }
     }
 
     private filterByLatestDate(demographics: DemographicData[]): DemographicData[] {
