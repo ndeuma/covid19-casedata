@@ -13,14 +13,21 @@ export class HistoryChartComponent implements OnInit {
 
     ngOnInit(): void {
         const ctx = document.getElementById("historyChart");
+        // Case history needs to be reversed to that the latest numbers are displayed on the right.
         const caseHistoryReversed = this.countyDetail.case_history.reverse();    
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: caseHistoryReversed.map(h => h.date),
                 datasets: [{
+                    label: 'Todesfälle',
+                    data: caseHistoryReversed.map(h => h.deaths_total),
+                    backgroundColor: caseHistoryReversed.map(h => "#000000"),
+                    borderColor: caseHistoryReversed.map(h => "#000000"),                        
+                    borderWidth: 1
+                }, {
                     label: 'Fälle',
-                    data: caseHistoryReversed.map(h => h.infected_total),
+                    data: caseHistoryReversed.map(h => h.infected_total - h.deaths_total),
                     backgroundColor: caseHistoryReversed.map(h => "#0080ff"),
                     borderColor: caseHistoryReversed.map(h => "#a0a0a0"),                        
                     borderWidth: 1
@@ -37,11 +44,15 @@ export class HistoryChartComponent implements OnInit {
                                     return value;
                                 }
                             }
-                        }
+                        },
+                        stacked: true
+                    }],
+                    xAxes: [{
+                        stacked: true
                     }]
                 },
                 legend: {
-                    display: false
+                    position: "bottom"
                 }
             }
         });        
