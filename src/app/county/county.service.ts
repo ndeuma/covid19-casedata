@@ -33,6 +33,7 @@ export class CountyService {
         return this.formatCountyDetail(county_data, case_data, demographic_data);
     }
 
+    // public for testing
     formatCountyDetail(county_data: Observable<CountyData>, case_data: Observable<CaseData[]>, demographic_data: Observable<DemographicData[]>): Observable<CountyDetail> {
         return combineLatest(county_data, case_data, demographic_data).pipe(
             map(([county, cases, demographics]) => { 
@@ -59,7 +60,7 @@ export class CountyService {
         );
     }
 
-    getIncidence(infected_by_100k: number): Incidence {
+    private getIncidence(infected_by_100k: number): Incidence {
         // Incidence classification similar to corona.rki.de
         if (infected_by_100k < 34) {
             return { displayClass: "very-low", label: "sehr niedrig" };
@@ -76,7 +77,7 @@ export class CountyService {
         }
     }
 
-    getNumberOfNewCases(cases: CaseData[]): number {
+    private getNumberOfNewCases(cases: CaseData[]): number {
         switch (cases.length) {
             case 0: return 0;
             case 1: return cases[0].infected_total;

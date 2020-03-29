@@ -2,7 +2,7 @@
   <header>    
     <h1>{{countyDetail.name}}&nbsp;<a [routerLink]="['/']" title="Zurück zur Übersicht"><i class="fas fa-sign-out-alt"></i></a></h1>
   </header>
-  <h1>{countyDetail.infected_total, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{countyDetail.infected_total | number:'.0':'de-DE' }}</em> Fälle}}</h1>
+  <h2>{countyDetail.infected_total, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{countyDetail.infected_total | number:'.0':'de-DE' }}</em> Fälle}}</h2>
   <p>bei einer Bevölkerung von <em>{{countyDetail.population | number:'.0':'de-DE' }}</em></p>
   <p>
     pro 100.000: {countyDetail.infected_by_100k, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{countyDetail.infected_by_100k | number:'.0':'de-DE' }}</em> Fälle}}
@@ -20,13 +20,13 @@
     </div>
   </div>
   <div class="chart case-history">
-    <h1>{countyDetail.new_cases, plural, =0 {<em>Kein</em> neuer Fall} =1 {<em>Ein</em> neuer Fall} other {<em>{{countyDetail.new_cases | number:'.0':'de-DE' }}</em> neue Fälle}} am {{countyDetail.latest_report_date }}</h1>
+    <h2>{countyDetail.new_cases, plural, =0 {<em>Kein</em> neuer Fall} =1 {<em>Ein</em> neuer Fall} other {<em>{{countyDetail.new_cases | number:'.0':'de-DE' }}</em> neue Fälle}} am {{countyDetail.latest_report_date }}</h2>
     <div class="chart-data">
       <casedata-history-chart [countyDetail]="countyDetail"></casedata-history-chart>       
     </div>        
   </div>
   <div class="chart case-history">
-    <h1>Fälle nach Alter und Geschlecht</h1>
+    <h2>Fälle nach Alter und Geschlecht</h2>
     <div class="chart-data">
       <casedata-age-distribution-chart [countyDetail]="countyDetail"></casedata-age-distribution-chart>             
     </div>
