@@ -27,6 +27,8 @@ export class HistoryChartComponent implements OnInit {
                     borderWidth: 1
                 }, {
                     label: 'Fälle',
+                    // Total bar height should be number of infected, not number of infected + number of deaths here
+                    // So we need to subtract the number of deaths here, and add it again for the numbers in the tooltip (see below)
                     data: caseHistoryReversed.map(h => h.infected_total - h.deaths_total),
                     backgroundColor: caseHistoryReversed.map(h => "#0080ff"),
                     borderColor: caseHistoryReversed.map(h => "#a0a0a0"),                        
@@ -53,6 +55,26 @@ export class HistoryChartComponent implements OnInit {
                 },
                 legend: {
                     position: "bottom"
+                },
+                tooltips: {
+                    // https://stackoverflow.com/questions/43793622/how-to-remove-square-label-from-tooltip-and-make-its-information-in-one-line
+                    custom: function(tooltip) {
+                        if (!tooltip) {
+                            return;
+                        }
+                        // Disable displaying the color box;
+                        tooltip.displayColors = false;
+                    },
+                    callbacks: {                        
+                        label: function(tooltipItem, data) {
+                            const current_infected_without_dead = data.datasets[1].data[tooltipItem.index];
+                            const current_dead = data.datasets[0].data[tooltipItem.index];
+                            return [
+                                `${data.datasets[1].label}: ${current_infected_without_dead + current_dead}`,
+                                `${data.datasets[0].label}: ${current_dead}`,
+                            ];
+                        }                         
+                    } 
                 }
             }
         });        
