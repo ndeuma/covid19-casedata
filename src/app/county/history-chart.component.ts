@@ -41,11 +41,7 @@ export class HistoryChartComponent implements OnInit {
                         ticks: {
                             beginAtZero: true,
                             // https://stackoverflow.com/questions/42135058/set-minimum-step-size-in-chart-js
-                            callback: function(value, index, values) {
-                                if (Math.floor(value) === value) {
-                                    return value;
-                                }
-                            }
+                            callback: (value, index, values) => (Math.floor(value) === value) ? value : undefined
                         },
                         stacked: true
                     }],
@@ -56,18 +52,13 @@ export class HistoryChartComponent implements OnInit {
                 legend: {
                     position: "bottom",
                     labels: {
-                        // Do no display "Todesfälle" in legend when there are no deaths
-                        filter: function(item, chart) {
-                            if (item.datasetIndex === 0 && chart.datasets[0].data.every((value) => value === 0)) {
-                                    return false;
-                            }
-                            return true;
-                        }
+                        // Do no display legend when there are no deaths
+                        filter: (item, chart) => chart.datasets[0].data.some((value) => value)
                     }
                 },
                 tooltips: {
                     // https://stackoverflow.com/questions/43793622/how-to-remove-square-label-from-tooltip-and-make-its-information-in-one-line
-                    custom: function(tooltip) {
+                    custom: (tooltip) => {
                         if (!tooltip) {
                             return;
                         }
@@ -75,7 +66,7 @@ export class HistoryChartComponent implements OnInit {
                         tooltip.displayColors = false;
                     },
                     callbacks: {                        
-                        label: function(tooltipItem, data) {
+                        label: (tooltipItem, data) => {
                             const current_infected_without_dead = data.datasets[1].data[tooltipItem.index];
                             const current_dead = data.datasets[0].data[tooltipItem.index];
                             return [
