@@ -1,6 +1,6 @@
 <div class="content" role="main" *ngIf="countyDetail$ | async as countyDetail">
   <header>    
-    <h1>{{countyDetail.name}}&nbsp;<a [routerLink]="['/']"><i class="fas fa-sign-out-alt"></i></a></h1>
+    <h1>{{countyDetail.name}}&nbsp;<a [routerLink]="['/']" title="Zurück zur Übersicht"><i class="fas fa-sign-out-alt"></i></a></h1>
   </header>
   <h1>{countyDetail.infected_total, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{countyDetail.infected_total | number:'.0':'de-DE' }}</em> Fälle}}</h1>
   <p>bei einer Bevölkerung von <em>{{countyDetail.population | number:'.0':'de-DE' }}</em> </p>
