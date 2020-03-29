@@ -20,4 +20,4 @@ Demo: https://niklas-deutschmann.de/covid19/
 Take a look on our [project on DevPost](https://devpost.com/software/08_data-hub-de_regionale-daten-sharepics) to get more information about the project and the contributors.
 
 ## License
-MIT
+* GNU General Public License v3.0
