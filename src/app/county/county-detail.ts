@@ -1,4 +1,5 @@
 import { NumberSymbol } from '@angular/common';
+import { GroupedObservable } from 'rxjs';
 
 export interface AgeGroup {
     range: string;
@@ -18,9 +19,18 @@ export interface CaseHistory {
     deaths_increment: number;
 }
 
-export interface Incidence {
-    displayClass: string,
-    label: string;
+
+export class Assessment {
+
+    static readonly VERY_GOOD = new Assessment("very-low", "sehr niedrig", "sehr gut");
+    static readonly GOOD = new Assessment("low", "niedrig", "gut");
+    static readonly MEDIUM = new Assessment("medium", "mittel", "mittel");
+    static readonly BAD = new Assessment("high", "hoch", "schlecht");
+    static readonly VERY_BAD = new Assessment("very-high", "sehr hoch", "sehr schlecht");
+    static readonly EXTREMELY_BAD = new Assessment("extremely-high", "extrem hoch", "extrem schlecht");
+
+    private constructor(readonly displayClass: string, readonly labelForIncidence: string, readonly labelForTrend: string) { }
+
 }
 
 export interface CountyDetail {
@@ -30,7 +40,9 @@ export interface CountyDetail {
     latest_report_date: string;
     infected_total: number;
     infected_by_100k: number | undefined;
-    incidence: Incidence | undefined;
+    incidenceAssessment: Assessment | undefined;
+    trend: number | undefined;
+    trendAssessment: Assessment | undefined;
     deaths_total: number;
     new_cases: number;
     male_percentage: number;

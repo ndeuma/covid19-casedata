@@ -5,9 +5,10 @@ import { CountyData } from './county-data.to';
 import { CaseData } from './case-data.to';
 import { DemographicData } from './demographic-data.to';
 import { Observable, combineLatest, fromEvent } from 'rxjs';
-import { CountyDetail, AgeGroup, CaseHistory, Incidence } from './county-detail';
+import { CountyDetail, AgeGroup, CaseHistory, Assessment } from './county-detail';
 import { map, count } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
+import * as moment from 'moment';
 
 @Injectable({
     providedIn: "root"
@@ -44,7 +45,9 @@ export class CountyService {
                     latest_report_date: cases.length > 0 ? formatDate(cases[0].date_day, "dd.MM.yy", "de_DE") : "",
                     infected_total: cases.length > 0 ? cases[0].infected_total : 0,                    
                     infected_by_100k: undefined,
-                    incidence: undefined,
+                    incidenceAssessment: undefined,
+                    trend: this.getTrend(cases),
+                    trendAssessment: undefined,
                     deaths_total: cases.length > 0 ? cases[0].deaths_total : 0,
                     new_cases: this.getNumberOfNewCases(cases),
                     male_percentage: this.getGenderPercentage(demographics, "m"),
@@ -53,26 +56,50 @@ export class CountyService {
                     age_groups: this.getAgeGroups(demographics),
                 }
                 result.infected_by_100k = Math.round((result.infected_total / result.population) * 100000);
-                result.incidence = this.getIncidence(result.infected_by_100k);
+                result.incidenceAssessment = this.getIncidenceAssessment(result.infected_by_100k);
+                result.trendAssessment = this.getTrendAssessment(result.trend);
                 return result;
             })
         );
     }
 
-    private getIncidence(infected_by_100k: number): Incidence {
+    private getIncidenceAssessment(infected_by_100k: number): Assessment {
         // Incidence classification similar to corona.rki.de
         if (infected_by_100k < 34) {
-            return { displayClass: "very-low", label: "sehr niedrig" };
+            return Assessment.VERY_GOOD;
         } else if (infected_by_100k < 59) {
-            return { displayClass: "low", label: "niedrig" };
+            return Assessment.GOOD;
         } else if (infected_by_100k < 93) {
-            return { displayClass: "medium", label: "mittel" }
+            return Assessment.MEDIUM;
         } else if (infected_by_100k < 159) {
-            return { displayClass: "high", label: "hoch" }
+            return Assessment.BAD;
         } else if (infected_by_100k < 313) {
-            return { displayClass: "very-high", label: "sehr hoch" }
+            return Assessment.VERY_BAD;
         } else {
-            return { displayClass: "extremely-high", label: "extrem hoch" }
+            return Assessment.EXTREMELY_BAD;
+        }
+    }
+
+    private getTrend(cases: CaseData[]): number {
+        const latest_case_data = cases[0];
+        const base_date = moment(latest_case_data.date_day).subtract(7, "days");        
+        const base_case_data = cases.find(c => moment(c.date_day).isSameOrBefore(base_date));
+        return base_case_data ? (latest_case_data.infected_total / base_case_data.infected_total) : undefined;
+    }
+
+    private getTrendAssessment(trend: number): Assessment {
+        if (trend < 1.75) {
+            return Assessment.VERY_GOOD;
+        } else if (trend < 2.5) {
+            return Assessment.GOOD;
+        } else if (trend < 3.25) {
+            return Assessment.MEDIUM;
+        } else if (trend < 4.0) {
+            return Assessment.BAD;
+        } else if (trend < 4.75) {
+            return Assessment.VERY_BAD;
+        } else {
+            return Assessment.EXTREMELY_BAD;
         }
     }
 

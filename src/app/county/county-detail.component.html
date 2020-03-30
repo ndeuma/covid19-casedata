@@ -6,7 +6,11 @@
   <p>bei einer Bevölkerung von <em>{{countyDetail.population | number:'.0':'de-DE' }}</em></p>
   <p>
     pro 100.000: {countyDetail.infected_by_100k, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{countyDetail.infected_by_100k | number:'.0':'de-DE' }}</em> Fälle}}
-    <span class="incidence {{countyDetail.incidence.displayClass}}">{{countyDetail.incidence.label}}</span>
+    <span class="assessment {{countyDetail.incidenceAssessment.displayClass}}">{{countyDetail.incidenceAssessment.labelForIncidence}}</span>
+  </p>
+  <p>
+    7-Tage-Trend: <em>{{(countyDetail.trend) ? "+" + ((countyDetail.trend - 1) | percent) : "Nicht ermittelbar" }}</em>&nbsp; 
+    <span *ngIf="countyDetail.trend" class="assessment {{countyDetail.trendAssessment.displayClass}}">{{countyDetail.trendAssessment.labelForTrend}}</span>
   </p>
   <div class="case-stats">
     <div class="case-stat-cell male">
