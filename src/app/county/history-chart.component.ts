@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { CountyDetail } from './county-detail';
 import { Chart } from "chart.js";
 
@@ -6,12 +6,18 @@ import { Chart } from "chart.js";
     selector: "casedata-history-chart",
     templateUrl: "history-chart.component.html",
 })
-export class HistoryChartComponent implements OnInit {
+export class HistoryChartComponent implements OnChanges {
 
     @Input()
     countyDetail: CountyDetail;
 
-    ngOnInit(): void {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.countyDetail) {
+            this.drawChart();
+        }
+    }
+
+    private drawChart(): void {
         const ctx = document.getElementById("historyChart");
         // Case history needs to be reversed to that the latest numbers are displayed on the right.
         const caseHistoryReversed = this.countyDetail.case_history.reverse();    

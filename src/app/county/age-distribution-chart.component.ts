@@ -1,18 +1,23 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { CountyDetail } from './county-detail';
 import { Chart } from "chart.js";
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 @Component({
     selector: "casedata-age-distribution-chart",
     templateUrl: "age-distribution-chart.component.html",
 })
-export class AgeDistributionChartComponent implements OnInit {
+export class AgeDistributionChartComponent implements OnChanges {
 
     @Input()
     countyDetail: CountyDetail;
 
-    ngOnInit(): void {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.countyDetail) {
+            this.drawChart();
+        }
+    }
+
+    private drawChart(): void {
         const ctx = document.getElementById("ageDistributionChart");    
         new Chart(ctx, {
             type: 'bar',
