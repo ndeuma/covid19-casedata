@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { CountyDetail } from './county-detail';
 import { Chart } from "chart.js";
+import { formatDate } from '@angular/common';
 
 @Component({
     selector: "casedata-history-chart",
@@ -24,7 +25,7 @@ export class HistoryChartComponent implements OnChanges {
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: caseHistoryReversed.map(h => h.date),
+                labels: caseHistoryReversed.map(h => formatDate(h.date, "dd.MM", "de_DE") ),
                 datasets: [{
                     label: 'Todesfälle',
                     data: caseHistoryReversed.map(h => h.deaths_total),
@@ -32,12 +33,18 @@ export class HistoryChartComponent implements OnChanges {
                     borderColor: caseHistoryReversed.map(h => "#000000"),                        
                     borderWidth: 1
                 }, {
+                    label: 'Genesungen',
+                    data: caseHistoryReversed.map(h => h.recoveries_total),
+                    backgroundColor: caseHistoryReversed.map(h => "#006400"),
+                    borderColor: caseHistoryReversed.map(h => "#006400"),                        
+                    borderWidth: 1
+                }, {
                     label: 'Fälle',
                     // Total bar height should be number of infected, not number of infected + number of deaths here
                     // So we need to subtract the number of deaths here, and add it again for the numbers in the tooltip (see below)
-                    data: caseHistoryReversed.map(h => h.infected_total - h.deaths_total),
+                    data: caseHistoryReversed.map(h => h.infected_total - h.deaths_total - h.recoveries_total),
                     backgroundColor: caseHistoryReversed.map(h => "#0080ff"),
-                    borderColor: caseHistoryReversed.map(h => "#a0a0a0"),                        
+                    borderColor: caseHistoryReversed.map(h => "#0080ff"),                        
                     borderWidth: 1
                 }]
             },
@@ -56,11 +63,7 @@ export class HistoryChartComponent implements OnChanges {
                     }]
                 },
                 legend: {
-                    position: "bottom",
-                    labels: {
-                        // Do no display legend when there are no deaths
-                        filter: (item, chart) => chart.datasets[0].data.some((value) => value)
-                    }
+                    position: "bottom"
                 },
                 tooltips: {
                     // https://stackoverflow.com/questions/43793622/how-to-remove-square-label-from-tooltip-and-make-its-information-in-one-line
@@ -73,11 +76,14 @@ export class HistoryChartComponent implements OnChanges {
                     },
                     callbacks: {                        
                         label: (tooltipItem, data) => {
-                            const current_infected_without_dead = data.datasets[1].data[tooltipItem.index];
+                            const current_sick = data.datasets[2].data[tooltipItem.index];
+                            const current_recovered = data.datasets[1].data[tooltipItem.index];
                             const current_dead = data.datasets[0].data[tooltipItem.index];
                             return [
-                                `${data.datasets[1].label}: ${current_infected_without_dead + current_dead}`,
-                                `${data.datasets[0].label}: ${current_dead}`,
+                                `insgesamt: ${current_sick + current_recovered + current_dead}`,
+                                `gerade krank: ${current_sick}`,
+                                `genesen: ${current_recovered}`,
+                                `Todesfälle: ${current_dead}`,
                             ];
                         }                         
                     } 

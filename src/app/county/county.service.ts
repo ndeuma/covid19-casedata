@@ -19,6 +19,9 @@ export class CountyService {
 
     private readonly PREDEFINED_AGE_GROUPS = ["0-4", "5-14", "15-34", "35-59", "60-79", "80+"];
 
+    // Estimated recovery time in days
+    private readonly RECOVERY_TIME = 21;
+
     getCounties(): Observable<CountyData[]> {
         return this.http.get<CountyData[]>(`${HOST}${API}/county/`);       
     }
@@ -54,6 +57,7 @@ export class CountyService {
                     female_percentage: this.getGenderPercentage(demographics, "w"),
                     case_history: this.getCaseHistory(cases),
                     age_groups: this.getAgeGroups(demographics),
+                    recovery_time: this.RECOVERY_TIME,
                 }
                 result.infected_by_100k = Math.round((result.infected_total / result.population) * 100000);
                 result.incidenceAssessment = this.getIncidenceAssessment(result.infected_by_100k);
@@ -81,6 +85,9 @@ export class CountyService {
     }
 
     private getTrend(cases: CaseData[]): number {
+        if (cases.length === 0) {
+            return undefined;
+        }
         const latest_case_data = cases[0];
         const base_date = moment(latest_case_data.date_day).subtract(7, "days");        
         const base_case_data = cases.find(c => moment(c.date_day).isSameOrBefore(base_date));
@@ -128,23 +135,50 @@ export class CountyService {
             const formattedDate = formatDate(cases[i].date_day, "dd.MM", "de_DE");
             if (i == cases.length - 1) {                
                 result.push({
-                    date: formattedDate,
+                    date: cases[i].date_day,
                     infected_total: cases[i].infected_total,
                     infected_increment: 0,
                     deaths_total: cases[i].deaths_total,
                     deaths_increment: 0,
+                    recoveries_total: 0,
                 });
             } else {
                 result.push({
-                    date: formattedDate,
+                    date: cases[i].date_day,
                     infected_total: cases[i].infected_total,
                     infected_increment: cases[i].infected_total - cases[i + 1].infected_total,
                     deaths_total: cases[i].deaths_total,
                     deaths_increment: cases[i].deaths_total - cases[i + 1].deaths_total,
+                    recoveries_total: 0,
                 });
             }
         }
+        if (cases.length > 0) {
+            this.calculateRecoveries(result, this.RECOVERY_TIME);
+        }
         return result;
+    }
+
+    public calculateRecoveries(result: CaseHistory[], recoveryTime: number) {
+        const deaths_at_end = result[0].deaths_total;
+        for (let i = 0; i < result.length; i++) {
+            const indexForDaysAgo = this.getIndexForDaysAgo(result, i, recoveryTime);
+            if (indexForDaysAgo != -1) {
+                result[i].recoveries_total = Math.max(0, result[indexForDaysAgo].infected_total - deaths_at_end);
+            } else {
+                result[i].recoveries_total = 0;
+            }
+        }
+    }
+
+    private getIndexForDaysAgo(result: CaseHistory[], currentIndex: number, recoveryTime: number): number {
+        const beforeCurrent = moment(result[currentIndex].date).subtract(recoveryTime, "days");
+        for (let i = currentIndex; i < result.length; i++) {
+            if (moment(result[i].date).isSameOrBefore(beforeCurrent)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private getAgeGroups(demographics: DemographicData[]): AgeGroup[] {

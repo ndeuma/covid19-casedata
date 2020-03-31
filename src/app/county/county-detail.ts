@@ -17,6 +17,7 @@ export interface CaseHistory {
     infected_increment: number;
     deaths_total: number;
     deaths_increment: number;
+    recoveries_total: number;
 }
 
 
@@ -43,10 +44,11 @@ export interface CountyDetail {
     incidenceAssessment: Assessment | undefined;
     trend: number | undefined;
     trendAssessment: Assessment | undefined;
-    deaths_total: number;
+    deaths_total: number;    
     new_cases: number;
     male_percentage: number;
     female_percentage: number;    
     case_history: CaseHistory[];
     age_groups: AgeGroup[];
+    recovery_time: number;
 }

@@ -28,6 +28,7 @@
     <div class="chart-data">
       <casedata-history-chart [countyDetail]="countyDetail"></casedata-history-chart>       
     </div>        
+    <em>Achtung:</em> Genesungen basieren nicht auf echten Zahlen, sondern auf einer geschätzten Krankheitsdauer von {{countyDetail.recovery_time}} Tagen.
   </div>
   <div class="chart case-history" *ngIf="countyDetail.deaths_total > 0">
     <h2>Todesfälle nach Alter</h2>

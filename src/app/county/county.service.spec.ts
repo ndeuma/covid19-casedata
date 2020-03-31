@@ -115,4 +115,26 @@ describe("County details...", () => {
             done();
         })
     });
+
+    it("...have recoveries computed correctly"), (done: DoneFn) => {
+        const input = [{
+            date: "2020-03-16", infected_total: 4, deaths_total: 1, infected_increment: 0, deaths_increment: 0, recoveries_total: 0,
+        }, {
+            date: "2020-03-13", infected_total: 4, deaths_total: 1, infected_increment: 2, deaths_increment: 1, recoveries_total: 0,
+        }, {
+            date: "2020-03-12", infected_total: 2, deaths_total: 0, infected_increment: 1, deaths_increment: 0, recoveries_total: 0,
+        }, {
+            date: "2020-03-10", infected_total: 1, deaths_total: 0, infected_increment: 0, deaths_increment: 0, recoveries_total: 0,
+        }];
+        service.calculateRecoveries(input, 3);
+        // The two new cases from 03-13, and of the first two cases have recovered
+        expect(input[0].recoveries_total).toEqual(3); 
+        // 03-13: First case may have recovered, but we have one dead (could be this case)
+        expect(input[1].recoveries_total).toEqual(0); 
+        // 03-12: First case still infected, second case has just been infected
+        expect(input[2].recoveries_total).toEqual(0); 
+        // 03-10: First case has just been infected
+        expect(input[3].recoveries_total).toEqual(0); 
+        done();
+    }
 });
