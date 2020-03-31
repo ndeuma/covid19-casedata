@@ -12,6 +12,7 @@ import { AgeDistributionChartComponent } from './county/age-distribution-chart.c
 import { AppComponent } from './app.component';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { FatalityRateChartComponent } from './county/fatality-rate-chart.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import localeDe from '@angular/common/locales/de';
     CountiesComponent,
     CountyDetailComponent,
     HistoryChartComponent,
+    FatalityRateChartComponent,
     AgeDistributionChartComponent
   ],
   imports: [

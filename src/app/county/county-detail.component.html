@@ -29,6 +29,12 @@
       <casedata-history-chart [countyDetail]="countyDetail"></casedata-history-chart>       
     </div>        
   </div>
+  <div class="chart case-history" *ngIf="countyDetail.deaths_total > 0">
+    <h2>Todesfälle nach Alter</h2>
+    <div class="chart-data">
+      <casedata-fatality-rate-chart [countyDetail]="countyDetail"></casedata-fatality-rate-chart>             
+    </div>
+  </div>
   <div class="chart case-history">
     <h2>Fälle nach Alter und Geschlecht</h2>
     <div class="chart-data">
