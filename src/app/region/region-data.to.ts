@@ -1,4 +1,4 @@
-export interface CountyData {    
+export interface RegionData {    
     name: string;    
     ags: string;
     state: string;

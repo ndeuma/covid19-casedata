@@ -1,14 +1,14 @@
-import { CountyService } from "./county.service";
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { from } from 'rxjs';
-import { CountyData } from './county-data.to';
+import { RegionData } from '../region/region-data.to';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
-import { CaseData } from './case-data.to';
+import { CaseData } from '../region/case-data.to';
+import { HealthService, calculateRecoveries } from "./health.service";
 
 
-const testCounty: CountyData = {
+const testRegion: RegionData = {
     name: "LK Kleinkleckerlasgreuth",
     ags: "999999",
     state: "Bayern",
@@ -29,22 +29,22 @@ const latestTestCaseData: CaseData = {
     last_updated: "2020-03-25",
 }
 
-describe("County details...", () => {
+describe("Region details...", () => {
     
-    let service: CountyService;
+    let service: HealthService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientModule],
-            providers: [CountyService]
+            providers: [HealthService]
         });
         registerLocaleData(localeDe, 'de');
-        service = TestBed.get(CountyService);
+        service = TestBed.get(HealthService);
     }); 
     
     it("...are displayed correctly when there are no recorded days of cases", (done: DoneFn) => {        
-        const countyDetail = service.formatCountyDetail(
-            from([testCounty]),
+        const countyDetail = service.generateRegionDetail(
+            from([testRegion]),
             from([[]]),
             from([[]]),
         );  
@@ -58,8 +58,8 @@ describe("County details...", () => {
     });
 
     it("...are displayed correctly when there is only a single recorded day of cases", (done: DoneFn) => {        
-        const countyDetail = service.formatCountyDetail(
-            from([testCounty]),
+        const countyDetail = service.generateRegionDetail(
+            from([testRegion]),
             from([[latestTestCaseData]]),
             from([[{
                 infected_total: 50,
@@ -86,8 +86,8 @@ describe("County details...", () => {
     });
 
     it("...are displayed correctly when demographic data is empty", (done: DoneFn) => {        
-        const countyDetail = service.formatCountyDetail(
-            from([testCounty]),
+        const countyDetail = service.generateRegionDetail(
+            from([testRegion]),
             from([[latestTestCaseData, {
                 infected_total: 30,
                 deaths_total: 4,
@@ -126,7 +126,7 @@ describe("County details...", () => {
         }, {
             date: "2020-03-10", infected_total: 1, deaths_total: 0, infected_increment: 0, deaths_increment: 0, recoveries_total: 0,
         }];
-        service.calculateRecoveries(input, 3);
+        calculateRecoveries(input, 3);
         // The two new cases from 03-13, and of the first two cases have recovered
         expect(input[0].recoveries_total).toEqual(3); 
         // 03-13: First case may have recovered, but we have one dead (could be this case)

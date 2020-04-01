@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { CountyDetail } from './county-detail';
+import { RegionDetail } from './region-detail';
 import { Chart } from "chart.js";
 
 @Component({
@@ -9,10 +9,10 @@ import { Chart } from "chart.js";
 export class FatalityRateChartComponent implements OnChanges {
 
     @Input()
-    countyDetail: CountyDetail;
+    regionDetail: RegionDetail;
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.countyDetail) {
+        if (changes.regionDetail) {
             this.drawChart();
         }
     }
@@ -22,20 +22,20 @@ export class FatalityRateChartComponent implements OnChanges {
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: this.countyDetail.age_groups.map(a => a.range),
+                labels: this.regionDetail.age_groups.map(a => a.range),
                 datasets: [{
                     label: "Todesfälle",
-                    data: this.countyDetail.age_groups.map(h => h.deaths_total),
-                    backgroundColor: this.countyDetail.age_groups.map(h => "#000000"),
-                    borderColor: this.countyDetail.age_groups.map(h => "#000000"),                        
+                    data: this.regionDetail.age_groups.map(h => h.deaths_total),
+                    backgroundColor: this.regionDetail.age_groups.map(h => "#000000"),
+                    borderColor: this.regionDetail.age_groups.map(h => "#000000"),                        
                     borderWidth: 1
                 }, {
                     // Total bar height should be number of infected, not number of infected + number of deaths here
                     // So we need to subtract the number of deaths here, and add it again for the numbers in the tooltip (see below)
                     label: "Fälle",
-                    data: this.countyDetail.age_groups.map(h => h.infected_total - h.deaths_total),
-                    backgroundColor: this.countyDetail.age_groups.map(h => "#0080ff"),
-                    borderColor: this.countyDetail.age_groups.map(h => "#a0a0a0"),                        
+                    data: this.regionDetail.age_groups.map(h => h.infected_total - h.deaths_total),
+                    backgroundColor: this.regionDetail.age_groups.map(h => "#0080ff"),
+                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),                        
                     borderWidth: 1
                 }]
             },

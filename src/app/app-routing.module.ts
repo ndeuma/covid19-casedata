@@ -1,24 +1,37 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CountiesComponent } from './counties.component';
-import { CountyDetailComponent } from './county/county-detail.component';
+import { RegionsComponent } from './regions.component';
+import { RegionDetailComponent } from './region/region-detail.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CountyDetailResolver } from './county/county-detail-resolver.service';
+import { CountyDetailResolver } from './region/germany/county/county-detail-resolver.service';
+import { StateDetailResolver } from './region/germany/state/state-detail-resolver.service';
 
 
 const routes: Routes = [  
   { 
     path: "",     
     pathMatch: "full",
-    component: CountiesComponent
+    component: RegionsComponent
   },  
-  { 
+  {
+    path: "germany",
+    children: [{
+        path: "state/:stateCode",
+        component: RegionDetailComponent,    
+        resolve: {      
+          regionDetail: StateDetailResolver,
+        },
+      }, {
+        path: "county/:countyId",        
+        component: RegionDetailComponent,    
+        resolve: {      
+          regionDetail: CountyDetailResolver
+        }        
+     }]
+  }, { 
     path: ":countyId",
-    component: CountyDetailComponent,    
-    resolve: {      
-      countyDetail: CountyDetailResolver
-    }
-  }  
+    redirectTo: "/germany/county/:countyId"
+  }
 ];
 
 @NgModule({

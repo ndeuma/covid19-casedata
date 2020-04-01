@@ -1,0 +1,46 @@
+<div class="content" role="main" *ngIf="regionDetail$ | async as regionDetail">
+  <header>    
+    <h1>{{regionDetail.name}}&nbsp;<a [routerLink]="['/']" title="Zurück zur Übersicht"><i class="fas fa-sign-out-alt"></i></a></h1>
+  </header>
+  <h2>{regionDetail.infected_total, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{regionDetail.infected_total | number:'.0':'de-DE' }}</em> Fälle}}</h2>
+  <p>bei einer Bevölkerung von <em>{{regionDetail.population | number:'.0':'de-DE' }}</em></p>
+  <p>
+    pro 100.000: {regionDetail.infected_by_100k, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{regionDetail.infected_by_100k | number:'.0':'de-DE' }}</em> Fälle}}
+    <span class="assessment {{regionDetail.incidenceAssessment.displayClass}}">{{regionDetail.incidenceAssessment.labelForIncidence}}</span>
+  </p>
+  <p>
+    7-Tage-Trend: <em>{{(regionDetail.trend) ? "+" + ((regionDetail.trend - 1) | percent) : "Nicht ermittelbar" }}</em>&nbsp; 
+    <span *ngIf="regionDetail.trend" class="assessment {{regionDetail.trendAssessment.displayClass}}">{{regionDetail.trendAssessment.labelForTrend}}</span>
+  </p>
+  <div class="case-stats">
+    <div class="case-stat-cell male">
+      <i class="fas fa-mars"></i><em>{{regionDetail.male_percentage}}%</em>
+    </div>
+    <div class="case-stat-cell female">
+      <i class="fas fa-venus"></i><em>{{regionDetail.female_percentage}}%</em>
+    </div>
+    <div class="case-stat-cell deaths">
+      <i class="fas fa-cross"></i><em>{{regionDetail.deaths_total | number:'.0':'de-DE' }}</em>
+    </div>
+  </div>
+  <div class="chart case-history">
+    <h2>{regionDetail.new_cases, plural, =0 {<em>Kein</em> neuer Fall} =1 {<em>Ein</em> neuer Fall} other {<em>{{regionDetail.new_cases | number:'.0':'de-DE' }}</em> neue Fälle}} am {{regionDetail.latest_report_date }}</h2>
+    <div class="chart-data">
+      <casedata-history-chart [regionDetail]="regionDetail"></casedata-history-chart>       
+    </div>        
+    <em>Achtung:</em> Genesungen basieren nicht auf echten Zahlen, sondern auf einer geschätzten Krankheitsdauer von {{regionDetail.recovery_time}} Tagen.
+  </div>
+  <div class="chart case-history" *ngIf="regionDetail.deaths_total > 0">
+    <h2>Todesfälle nach Alter</h2>
+    <div class="chart-data">
+      <casedata-fatality-rate-chart [regionDetail]="regionDetail"></casedata-fatality-rate-chart>             
+    </div>
+  </div>
+  <div class="chart case-history">
+    <h2>Fälle nach Alter und Geschlecht</h2>
+    <div class="chart-data">
+      <casedata-age-distribution-chart [regionDetail]="regionDetail"></casedata-age-distribution-chart>             
+    </div>
+  </div>
+</div>
+

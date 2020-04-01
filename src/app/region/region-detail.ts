@@ -34,7 +34,7 @@ export class Assessment {
 
 }
 
-export interface CountyDetail {
+export interface RegionDetail {
     name: string;
     county_id: string;
     population: number;

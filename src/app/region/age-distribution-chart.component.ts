@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { CountyDetail } from './county-detail';
+import { RegionDetail } from './region-detail';
 import { Chart } from "chart.js";
 
 @Component({
@@ -9,10 +9,10 @@ import { Chart } from "chart.js";
 export class AgeDistributionChartComponent implements OnChanges {
 
     @Input()
-    countyDetail: CountyDetail;
+    regionDetail: RegionDetail;
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.countyDetail) {
+        if (changes.regionDetail) {
             this.drawChart();
         }
     }
@@ -22,18 +22,18 @@ export class AgeDistributionChartComponent implements OnChanges {
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: this.countyDetail.age_groups.map(a => a.range),
+                labels: this.regionDetail.age_groups.map(a => a.range),
                 datasets: [{
                     label: 'männlich',
-                    data: this.countyDetail.age_groups.map(h => h.infected_male),
-                    backgroundColor: this.countyDetail.age_groups.map(h => "#0080ff"),
-                    borderColor: this.countyDetail.age_groups.map(h => "#a0a0a0"),                        
+                    data: this.regionDetail.age_groups.map(h => h.infected_male),
+                    backgroundColor: this.regionDetail.age_groups.map(h => "#0080ff"),
+                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),                        
                     borderWidth: 1
                 }, {
                     label: 'weiblich',
-                    data: this.countyDetail.age_groups.map(h => h.infected_female),
-                    backgroundColor: this.countyDetail.age_groups.map(h => "#20ff00"),
-                    borderColor: this.countyDetail.age_groups.map(h => "#a0a0a0"),                        
+                    data: this.regionDetail.age_groups.map(h => h.infected_female),
+                    backgroundColor: this.regionDetail.age_groups.map(h => "#20ff00"),
+                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),                        
                     borderWidth: 1
                 }]
             },

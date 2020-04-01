@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { CountyDetail } from './county-detail';
+import { RegionDetail } from './region-detail';
 import { Chart } from "chart.js";
 import { formatDate } from '@angular/common';
 
@@ -10,10 +10,10 @@ import { formatDate } from '@angular/common';
 export class HistoryChartComponent implements OnChanges {
 
     @Input()
-    countyDetail: CountyDetail;
+    regionDetail: RegionDetail;
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.countyDetail) {
+        if (changes.regionDetail) {
             this.drawChart();
         }
     }
@@ -21,7 +21,7 @@ export class HistoryChartComponent implements OnChanges {
     private drawChart(): void {
         const ctx = document.getElementById("historyChart");
         // Case history needs to be reversed to that the latest numbers are displayed on the right.
-        const caseHistoryReversed = this.countyDetail.case_history.reverse();    
+        const caseHistoryReversed = this.regionDetail.case_history.reverse();    
         new Chart(ctx, {
             type: 'bar',
             data: {
