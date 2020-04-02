@@ -34,7 +34,7 @@
       <em>Achtung:</em> Genesungen basieren nicht auf echten Zahlen, sondern auf einer geschätzten Krankheitsdauer von {{regionDetail.recovery_time}} Tagen.
     </ng-container>
     <ng-container *ngIf="!regionDetail.extendedDataAvailable">
-      <em>Achtung:</em> Für Bundesländer werden nur die reinen Fallzahlen angezeigt, keine Todesfälle und keine Geschlechter-/Altersverteilung.
+      <em>Achtung:</em> Für Bundesländer werden nur die reinen Fallzahlen angezeigt, keine Todesfälle, keine Genesungen, und keine Geschlechter-/Altersverteilung.
     </ng-container>
   </div>
   <div class="chart case-history" *ngIf="regionDetail.extendedDataAvailable && regionDetail.deaths_total > 0">

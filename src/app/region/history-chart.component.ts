@@ -21,7 +21,7 @@ export class HistoryChartComponent implements OnChanges {
     private drawChart(): void {
         const ctx = document.getElementById("historyChart");
         // Case history needs to be reversed to that the latest numbers are displayed on the right.
-        const caseHistoryReversed = this.regionDetail.case_history.reverse();    
+        const caseHistoryReversed = this.regionDetail.case_history.slice(0, 14).reverse();    
         new Chart(ctx, {
             type: 'bar',
             data: {
