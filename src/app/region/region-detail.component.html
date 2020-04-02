@@ -9,10 +9,12 @@
     <span class="assessment {{regionDetail.incidenceAssessment.displayClass}}">{{regionDetail.incidenceAssessment.labelForIncidence}}</span>
   </p>
   <p>
-    7-Tage-Trend: <em>{{(regionDetail.trend) ? "+" + ((regionDetail.trend - 1) | percent) : "Nicht ermittelbar" }}</em>&nbsp; 
-    <span *ngIf="regionDetail.trend" class="assessment {{regionDetail.trendAssessment.displayClass}}">{{regionDetail.trendAssessment.labelForTrend}}</span>
-  </p>
-  <div class="case-stats">
+    7-Tage-Trend: <em>{{(regionDetail.trend) ? "+" + ((regionDetail.trend - 1) | percent) : "Nicht ermittelbar" }}</em>&nbsp;
+    <span *ngIf="regionDetail.trend" class="assessment {{regionDetail.trendAssessment.displayClass}}">
+        {{regionDetail.trendAssessment.labelForTrend}}
+    </span>
+  </p>  
+  <div class="case-stats" *ngIf="regionDetail.extendedDataAvailable">
     <div class="case-stat-cell male">
       <i class="fas fa-mars"></i><em>{{regionDetail.male_percentage}}%</em>
     </div>
@@ -28,15 +30,20 @@
     <div class="chart-data">
       <casedata-history-chart [regionDetail]="regionDetail"></casedata-history-chart>       
     </div>        
-    <em>Achtung:</em> Genesungen basieren nicht auf echten Zahlen, sondern auf einer geschätzten Krankheitsdauer von {{regionDetail.recovery_time}} Tagen.
+    <ng-container *ngIf="regionDetail.extendedDataAvailable">
+      <em>Achtung:</em> Genesungen basieren nicht auf echten Zahlen, sondern auf einer geschätzten Krankheitsdauer von {{regionDetail.recovery_time}} Tagen.
+    </ng-container>
+    <ng-container *ngIf="!regionDetail.extendedDataAvailable">
+      <em>Achtung:</em> Für Bundesländer werden nur die reinen Fallzahlen angezeigt, keine Todesfälle und keine Geschlechter-/Altersverteilung.
+    </ng-container>
   </div>
-  <div class="chart case-history" *ngIf="regionDetail.deaths_total > 0">
+  <div class="chart case-history" *ngIf="regionDetail.extendedDataAvailable && regionDetail.deaths_total > 0">
     <h2>Todesfälle nach Alter</h2>
     <div class="chart-data">
       <casedata-fatality-rate-chart [regionDetail]="regionDetail"></casedata-fatality-rate-chart>             
     </div>
   </div>
-  <div class="chart case-history">
+  <div class="chart case-history" *ngIf="regionDetail.extendedDataAvailable && regionDetail.age_groups.length > 0">
     <h2>Fälle nach Alter und Geschlecht</h2>
     <div class="chart-data">
       <casedata-age-distribution-chart [regionDetail]="regionDetail"></casedata-age-distribution-chart>             

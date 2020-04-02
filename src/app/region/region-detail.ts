@@ -35,6 +35,7 @@ export class Assessment {
 }
 
 export interface RegionDetail {
+    extendedDataAvailable: boolean;
     name: string;
     county_id: string;
     population: number;
@@ -50,5 +51,5 @@ export interface RegionDetail {
     female_percentage: number;    
     case_history: CaseHistory[];
     age_groups: AgeGroup[];
-    recovery_time: number;
+    recovery_time: number;        
 }

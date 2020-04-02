@@ -1,34 +1,98 @@
+$countyHighlightColor: #0080ff;
+$stateHighlightColor: #0080ff;
+$emphasisColor: #0080ff;
+$textColor: #404040;
+$borderColor:  #f0f0f0;
+
+.logo {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin: 0px;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
+    color: $textColor;
     background-color: #ffffff;
 }
 
-.county-label {
-    display: inline-block;
-    border: 1px solid  #0080ff;
+.region-label {
+    display: inline-block;    
     padding: 8px;
     margin: 8px;
     border-radius: 20px;
     text-decoration: none;
     font-weight: bold;
-    color: #0080ff;
+    
 }
 
-.county-label:hover {    
+.county-de {
+    font-size: 0.9em;
+    border: 1px solid $countyHighlightColor;
+    color: $countyHighlightColor;
+}
+
+.county-de:hover {    
     color: #ffffff;
-    background-color: #0080ff;
+    background-color: $countyHighlightColor;
 }
 
-a {
-    color: #0080ff;
+.county-de a {
+    color: $countyHighlightColor;
+}
+
+.state-de {
+    font-size: 1.1em;
+    border: 2px solid $stateHighlightColor;
+    color: $stateHighlightColor;
+}
+
+.state-de:hover {    
+    color: #ffffff;
+    background-color: $stateHighlightColor;
+}
+
+.state-de a {
+    color: $stateHighlightColor;
+}
+
+ul.top {
+    padding-left: 0px;
+}
+
+ul.top > li {
+    border-bottom: 5px;
+    border-bottom-style: solid;
+    border-bottom-color: #f0f0f0;
+    padding: 8px 0px;
+}
+
+li {    
+    list-style-type: none;
+}
+
+ul li ul {
+    padding-left: 30px;
+}
+
+ul li ul li {
+    display: inline-block;    
+    margin-bottom: 0px;
+}
+
+
+a, a:hover {
+    color: $emphasisColor;
+    text-decoration: none;
 }
 
 h1 {
-    font-size: 1.8em;
+    font-size: 1.8em;    
 }
 
 h2 {
-    font-size: 1.2em;
+    font-size: 1.2em;    
 }
 
 .fas {
@@ -41,7 +105,7 @@ div {
 }
 
 em {
-    color: #0080ff;
+    color: $emphasisColor;
     font-weight: bold;
     font-style: normal;
 }
@@ -92,7 +156,7 @@ em {
     flex: auto;
     text-align: center;
     padding: 10px;    
-    border: 2px solid #a0a0a0;
+    border: 2px solid $borderColor;
     border-radius: 5px;
 }
 
@@ -102,7 +166,7 @@ em {
 
 .chart {
     padding: 10px;    
-    border: 2px solid #a0a0a0;
+    border: 2px solid $borderColor;
     border-radius: 5px;    
 }
 

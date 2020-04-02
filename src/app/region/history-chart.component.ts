@@ -63,7 +63,19 @@ export class HistoryChartComponent implements OnChanges {
                     }]
                 },
                 legend: {
-                    position: "bottom"
+                    position: "bottom",
+                    labels: {
+                        // Do no display "Todesfälle" in legend when there are no deaths
+                        filter: function(item, chart) {
+                            if (item.datasetIndex === 0 && chart.datasets[0].data.every((value) => value === 0)) {
+                                    return false;
+                            }
+                            if (item.datasetIndex === 1 && chart.datasets[1].data.every((value) => value === 0)) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    }
                 },
                 tooltips: {
                     // https://stackoverflow.com/questions/43793622/how-to-remove-square-label-from-tooltip-and-make-its-information-in-one-line
@@ -79,12 +91,17 @@ export class HistoryChartComponent implements OnChanges {
                             const current_sick = data.datasets[2].data[tooltipItem.index];
                             const current_recovered = data.datasets[1].data[tooltipItem.index];
                             const current_dead = data.datasets[0].data[tooltipItem.index];
-                            return [
-                                `insgesamt: ${current_sick + current_recovered + current_dead}`,
+                            const total = current_sick + current_recovered + current_dead;
+                            const tooltipLines = [];
+                            tooltipLines.push(`insgesamt: ${total}`);
+                            if (this.regionDetail.extendedDataAvailable) {
+                                tooltipLines.push(
                                 `gerade krank: ${current_sick}`,
                                 `genesen: ${current_recovered}`,
                                 `Todesfälle: ${current_dead}`,
-                            ];
+                                );
+                            }
+                            return tooltipLines;
                         }                         
                     } 
                 }

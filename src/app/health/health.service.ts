@@ -23,11 +23,13 @@ export class HealthService {
     generateRegionDetail(
         county_data: Observable<RegionData>, 
         case_data: Observable<CaseData[]>, 
-        demographic_data: Observable<DemographicData[]>
+        demographic_data: Observable<DemographicData[]>,
+        extendedDataAvailable: boolean
     ): Observable<RegionDetail> {
         return combineLatest(county_data, case_data, demographic_data).pipe(
             map(([county, cases, demographics]) => { 
-                const result = {                
+                const result = {               
+                    extendedDataAvailable: extendedDataAvailable, 
                     name: county.gen + " (" + county.bez + ")",
                     county_id: county.ags,
                     population: county.population,
@@ -41,7 +43,7 @@ export class HealthService {
                     new_cases: getNumberOfNewCases(cases),
                     male_percentage: getGenderPercentage(demographics, "m"),
                     female_percentage: getGenderPercentage(demographics, "w"),
-                    case_history: getCaseHistory(cases),
+                    case_history: getCaseHistory(cases, extendedDataAvailable),
                     age_groups: getAgeGroups(demographics),
                     recovery_time: RECOVERY_TIME,
                 }
@@ -116,7 +118,7 @@ function getGenderPercentage(demographics: DemographicData[], gender: string): n
     return Math.round((infected_gender / infected_total) * 100);
 }
 
-function getCaseHistory(cases: CaseData[]): CaseHistory[] {
+function getCaseHistory(cases: CaseData[], extendedDataAvailable: boolean): CaseHistory[] {
     const result = [];
     for (let i = 0; i < cases.length; i++) {
         const formattedDate = formatDate(cases[i].date_day, "dd.MM", "de_DE");
@@ -140,7 +142,7 @@ function getCaseHistory(cases: CaseData[]): CaseHistory[] {
             });
         }
     }
-    if (cases.length > 0) {
+    if (cases.length > 0 && extendedDataAvailable) {
         calculateRecoveries(result, RECOVERY_TIME);
     }
     return result;
