@@ -4,16 +4,27 @@
   </header>
   <h2>{regionDetail.infected_total, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{regionDetail.infected_total | number:'.0':'de-DE' }}</em> Fälle}}</h2>
   <p>bei einer Bevölkerung von <em>{{regionDetail.population | number:'.0':'de-DE' }}</em></p>
-  <p>
-    pro 100.000: {regionDetail.infected_by_100k, plural, =0 {<em>Kein</em> Fall} =1 {<em>Ein</em> Fall} other {<em>{{regionDetail.infected_by_100k | number:'.0':'de-DE' }}</em> Fälle}}
-    <span class="assessment {{regionDetail.incidenceAssessment.displayClass}}">{{regionDetail.incidenceAssessment.labelForIncidence}}</span>
-  </p>
-  <p>
-    7-Tage-Trend: <em>{{(regionDetail.trend) ? "+" + ((regionDetail.trend - 1) | percent) : "Nicht ermittelbar" }}</em>&nbsp;
-    <span *ngIf="regionDetail.trend" class="assessment {{regionDetail.trendAssessment.displayClass}}">
-        {{regionDetail.trendAssessment.labelForTrend}}
-    </span>
-  </p>  
+  <table>
+    <tr>
+      <td>Fälle pro 100.000:</td> 
+      <td><em>{{regionDetail.infected_by_100k}}</em></td> 
+      <td><span class="assessment {{regionDetail.incidenceAssessment.displayClass}}">{{regionDetail.incidenceAssessment.labelForIncidence}}</span></td> 
+    </tr>
+    <tr>
+      <td>7-Tage-Trend: </td> 
+      <td><em>{{(regionDetail.trend) ? "+" + ((regionDetail.trend - 1) | percent) : "Nicht ermittelbar" }}</em>&nbsp;</td> 
+      <td> 
+        <span *ngIf="regionDetail.trend" class="assessment {{regionDetail.trendAssessment.displayClass}}">
+            {{regionDetail.trendAssessment.labelForTrend}}
+        </span>
+      </td> 
+    </tr>
+    <tr>
+      <td>Kurve: </td> 
+      <td><em>{{regionDetail.regression}}</em></td> 
+      <td><span class="assessment {{regionDetail.regressionAssessment.displayClass}}">{{regionDetail.regressionAssessment.labelForCurve}}</span></td> 
+    </tr>
+  </table>
   <div class="case-stats" *ngIf="regionDetail.extendedDataAvailable">
     <div class="case-stat-cell male">
       <i class="fas fa-mars"></i><em>{{regionDetail.male_percentage}}%</em>

@@ -9,6 +9,7 @@ import { RegionDetail, Assessment, CaseHistory, AgeGroup } from "../region/regio
 import { map } from "rxjs/operators";
 import { formatDate } from "@angular/common";
 import * as moment from "moment";
+import regression from "regression";
 
 const PREDEFINED_AGE_GROUPS = ["0-4", "5-14", "15-34", "35-59", "60-79", "80+"];
 
@@ -39,6 +40,8 @@ export class HealthService {
                     incidenceAssessment: undefined,
                     trend: getTrend(cases),
                     trendAssessment: undefined,
+                    regression: getRegression(cases),
+                    regressionAssessment: undefined,
                     deaths_total: cases.length > 0 ? cases[0].deaths_total : 0,
                     new_cases: getNumberOfNewCases(cases),
                     male_percentage: getGenderPercentage(demographics, "m"),
@@ -50,6 +53,7 @@ export class HealthService {
                 result.infected_by_100k = Math.round((result.infected_total / result.population) * 100000);
                 result.incidenceAssessment = getIncidenceAssessment(result.infected_by_100k);
                 result.trendAssessment = getTrendAssessment(result.trend);
+                result.regressionAssessment = getRegressionAssessment(result.regression);
                 return result;
             })
         );
@@ -97,6 +101,34 @@ function getTrendAssessment(trend: number): Assessment {
     } else {
         return Assessment.EXTREMELY_BAD;
     }
+}
+
+function getRegressionAssessment(regression: number): Assessment {
+    if (regression < -0.4) {
+        return Assessment.VERY_GOOD;
+    } else if (regression < 0) {
+        return Assessment.GOOD;
+    } else if (regression < 0.1) {
+        return Assessment.MEDIUM;
+    } else if (regression < 0.3) {
+        return Assessment.BAD;
+    } else if (regression < 0.5) {
+        return Assessment.VERY_BAD;
+    } else {
+        return Assessment.EXTREMELY_BAD;
+    }
+}
+
+function getRegression(cases: CaseData[]): number {    
+    const latest_case_data = cases[0];    
+    const normalizationFactor = cases[0].infected_total / 100;
+    const base_date = moment(latest_case_data.date_day).subtract(7, "days");        
+    const input = cases.filter((c) => moment(c.date_day).isAfter(base_date)).reverse().map((c, idx) => [idx, c.infected_total / normalizationFactor]);    
+    if (input.length < 3) {
+        return 0;
+    }
+    const regr = regression.polynomial(input, { order: 2});     
+    return regr.equation[0];
 }
 
 function getNumberOfNewCases(cases: CaseData[]): number {

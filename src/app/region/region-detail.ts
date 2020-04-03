@@ -23,14 +23,19 @@ export interface CaseHistory {
 
 export class Assessment {
 
-    static readonly VERY_GOOD = new Assessment("very-low", "sehr niedrig", "sehr gut");
-    static readonly GOOD = new Assessment("low", "niedrig", "gut");
-    static readonly MEDIUM = new Assessment("medium", "mittel", "mittel");
-    static readonly BAD = new Assessment("high", "hoch", "schlecht");
-    static readonly VERY_BAD = new Assessment("very-high", "sehr hoch", "sehr schlecht");
-    static readonly EXTREMELY_BAD = new Assessment("extremely-high", "extrem hoch", "extrem schlecht");
+    static readonly VERY_GOOD = new Assessment("very-low", "sehr niedrig", "sehr gut", "schnell flacher werdend");
+    static readonly GOOD = new Assessment("low", "niedrig", "gut", "flacher werdend");
+    static readonly MEDIUM = new Assessment("medium", "mittel", "mittel", "etwa gerade");
+    static readonly BAD = new Assessment("high", "hoch", "schlecht", "etwas steiler werdend");
+    static readonly VERY_BAD = new Assessment("very-high", "sehr hoch", "sehr schlecht", "steiler werdend");
+    static readonly EXTREMELY_BAD = new Assessment("extremely-high", "extrem hoch", "extrem schlecht", "schnell steiler werdend");
 
-    private constructor(readonly displayClass: string, readonly labelForIncidence: string, readonly labelForTrend: string) { }
+    private constructor(
+        readonly displayClass: string, 
+        readonly labelForIncidence: string, 
+        readonly labelForTrend: string,
+        readonly labelForCurve: string,
+    ) { }
 
 }
 
@@ -45,6 +50,8 @@ export interface RegionDetail {
     incidenceAssessment: Assessment | undefined;
     trend: number | undefined;
     trendAssessment: Assessment | undefined;
+    regression: number;
+    regressionAssessment: Assessment;
     deaths_total: number;    
     new_cases: number;
     male_percentage: number;
