@@ -64,15 +64,15 @@ export class HealthService {
 
 function getIncidenceAssessment(infected_by_100k: number): Assessment {
     // Incidence classification similar to corona.rki.de
-    if (infected_by_100k < 34) {
+    if (infected_by_100k < 59) {
         return Assessment.VERY_GOOD;
-    } else if (infected_by_100k < 59) {
+    } else if (infected_by_100k < 104) {
         return Assessment.GOOD;
-    } else if (infected_by_100k < 93) {
+    } else if (infected_by_100k < 166) {
         return Assessment.MEDIUM;
-    } else if (infected_by_100k < 159) {
+    } else if (infected_by_100k < 287) {
         return Assessment.BAD;
-    } else if (infected_by_100k < 313) {
+    } else if (infected_by_100k < 552) {
         return Assessment.VERY_BAD;
     } else {
         return Assessment.EXTREMELY_BAD;
