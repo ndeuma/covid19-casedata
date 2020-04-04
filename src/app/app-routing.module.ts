@@ -5,6 +5,7 @@ import { RegionDetailComponent } from './region/region-detail.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CountyDetailResolver } from './region/germany/county/county-detail-resolver.service';
 import { StateDetailResolver } from './region/germany/state/state-detail-resolver.service';
+import { GermanyDetailResolver } from "./region/germany/germany-detail.resolver";
 
 
 const routes: Routes = [  
@@ -16,6 +17,12 @@ const routes: Routes = [
   {
     path: "germany",
     children: [{
+        path: "all",
+        component: RegionDetailComponent,    
+        resolve: {      
+          regionDetail: GermanyDetailResolver,
+        },
+      }, {
         path: "state/:stateCode",
         component: RegionDetailComponent,    
         resolve: {      

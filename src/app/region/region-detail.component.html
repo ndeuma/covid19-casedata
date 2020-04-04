@@ -25,15 +25,21 @@
       <td><span class="assessment {{regionDetail.regressionAssessment.displayClass}}">{{regionDetail.regressionAssessment.labelForCurve}}</span></td> 
     </tr>
   </table>
-  <div class="case-stats" *ngIf="regionDetail.extendedDataAvailable">
+  <div class="case-stats">
     <div class="case-stat-cell male">
-      <i class="fas fa-mars"></i><em>{{regionDetail.male_percentage}}%</em>
+      <i class="fas fa-mars"></i>
+      <em *ngIf="regionDetail.regionType === 'county'">{{regionDetail.male_percentage}}%</em>
+      <em *ngIf="regionDetail.regionType !== 'county'">nicht verfügbar</em>
     </div>
     <div class="case-stat-cell female">
-      <i class="fas fa-venus"></i><em>{{regionDetail.female_percentage}}%</em>
+      <i class="fas fa-venus"></i>
+      <em *ngIf="regionDetail.regionType === 'county'">{{regionDetail.female_percentage}}%</em>
+      <em *ngIf="regionDetail.regionType !== 'county'">nicht verfügbar</em>
     </div>
     <div class="case-stat-cell deaths">
-      <i class="fas fa-cross"></i><em>{{regionDetail.deaths_total | number:'.0':'de-DE' }}</em>
+      <i class="fas fa-cross"></i>
+      <em *ngIf="regionDetail.regionType !== 'state'">{{regionDetail.deaths_total | number:'.0':'de-DE' }}</em>
+      <em *ngIf="regionDetail.regionType === 'state'">nicht verfügbar</em>
     </div>
   </div>
   <div class="chart case-history">
@@ -41,20 +47,20 @@
     <div class="chart-data">
       <casedata-history-chart [regionDetail]="regionDetail"></casedata-history-chart>       
     </div>        
-    <ng-container *ngIf="regionDetail.extendedDataAvailable">
+    <ng-container *ngIf="regionDetail.regionType !== 'state'">
       <em>Achtung:</em> Genesungen basieren nicht auf echten Zahlen, sondern auf einer geschätzten Krankheitsdauer von {{regionDetail.recovery_time}} Tagen.
     </ng-container>
-    <ng-container *ngIf="!regionDetail.extendedDataAvailable">
+    <ng-container *ngIf="regionDetail.regionType === 'state'">
       <em>Achtung:</em> Für Bundesländer werden nur die reinen Fallzahlen angezeigt, keine Todesfälle, keine Genesungen, und keine Geschlechter-/Altersverteilung.
     </ng-container>
   </div>
-  <div class="chart case-history" *ngIf="regionDetail.extendedDataAvailable && regionDetail.deaths_total > 0">
+  <div class="chart case-history" *ngIf="regionDetail.regionType === 'county' && regionDetail.regionType.deaths_total > 0">
     <h2>Todesfälle nach Alter</h2>
     <div class="chart-data">
       <casedata-fatality-rate-chart [regionDetail]="regionDetail"></casedata-fatality-rate-chart>             
     </div>
   </div>
-  <div class="chart case-history" *ngIf="regionDetail.extendedDataAvailable && regionDetail.age_groups.length > 0">
+  <div class="chart case-history" *ngIf="regionDetail.regionType === 'county'">
     <h2>Fälle nach Alter und Geschlecht</h2>
     <div class="chart-data">
       <casedata-age-distribution-chart [regionDetail]="regionDetail"></casedata-age-distribution-chart>             

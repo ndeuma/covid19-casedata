@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { RegionDetail } from '../../region-detail';
+import { RegionDetail, RegionType } from '../../region-detail';
 
 import { CountyDetailService } from "./county-detail.service";
 import { CountyCaseService } from "./county-case.service";
@@ -26,6 +26,6 @@ export class CountyDetailResolver implements Resolve<RegionDetail> {
         const county_data = this.countyDetailService.getCountyDetail(countyId);
         const case_data = this.countyCaseService.getCountyCases(countyId);
         const demographic_data = this.countyDemographicService.getDemographics(countyId);
-        return this.healthService.generateRegionDetail(county_data, case_data, demographic_data, true);
+        return this.healthService.generateRegionDetail(county_data, case_data, demographic_data, "county");
     }
 }

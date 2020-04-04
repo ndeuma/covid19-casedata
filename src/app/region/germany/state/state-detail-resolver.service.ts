@@ -5,6 +5,7 @@ import { of } from "rxjs";
 import { StateDetailService } from "./state-detail.service";
 import { StateCaseService } from "./state-case.service";
 import { HealthService } from "src/app/health/health.service";
+import { RegionType } from "../../region-detail";
 
 @Injectable({
     providedIn: "root",    
@@ -21,7 +22,7 @@ export class StateDetailResolver implements Resolve<any> {
         const stateCode = route.params.stateCode!;
         const county_data = this.stateDetailService.getStateDetail(stateCode);
         const case_data = this.stateCaseService.getStateCases(stateCode);        
-        return this.healthService.generateRegionDetail(county_data, case_data, of([]), false);
+        return this.healthService.generateRegionDetail(county_data, case_data, of([]), "state");
     }
     
 }

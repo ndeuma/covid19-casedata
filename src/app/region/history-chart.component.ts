@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { RegionDetail } from './region-detail';
+import { RegionDetail, RegionType } from './region-detail';
 import { Chart } from "chart.js";
 import { formatDate } from '@angular/common';
 
@@ -94,7 +94,7 @@ export class HistoryChartComponent implements OnChanges {
                             const total = current_sick + current_recovered + current_dead;
                             const tooltipLines = [];
                             tooltipLines.push(`insgesamt: ${total}`);
-                            if (this.regionDetail.extendedDataAvailable) {
+                            if (this.regionDetail.regionType !== "state") {
                                 tooltipLines.push(
                                 `gerade krank: ${current_sick}`,
                                 `genesen: ${current_recovered}`,

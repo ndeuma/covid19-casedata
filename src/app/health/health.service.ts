@@ -4,12 +4,14 @@ import { Observable, combineLatest } from "rxjs";
 import { RegionData } from "../region/region-data.to";
 import { CaseData } from "../region/case-data.to";
 import { DemographicData } from "../region/demographic-data.to";
-import { RegionDetail, Assessment, CaseHistory, AgeGroup } from "../region/region-detail";
+import { RegionDetail, RegionType, Assessment, CaseHistory, AgeGroup } from "../region/region-detail";
 
 import { map } from "rxjs/operators";
 import { formatDate } from "@angular/common";
 import * as moment from "moment";
 import regression from "regression";
+
+
 
 const PREDEFINED_AGE_GROUPS = ["0-4", "5-14", "15-34", "35-59", "60-79", "80+"];
 
@@ -25,12 +27,12 @@ export class HealthService {
         county_data: Observable<RegionData>, 
         case_data: Observable<CaseData[]>, 
         demographic_data: Observable<DemographicData[]>,
-        extendedDataAvailable: boolean
+        regionType: RegionType
     ): Observable<RegionDetail> {
         return combineLatest(county_data, case_data, demographic_data).pipe(
             map(([county, cases, demographics]) => { 
                 const result = {               
-                    extendedDataAvailable: extendedDataAvailable, 
+                    regionType: regionType, 
                     name: county.gen + " (" + county.bez + ")",
                     county_id: county.ags,
                     population: county.population,
@@ -46,7 +48,7 @@ export class HealthService {
                     new_cases: getNumberOfNewCases(cases),
                     male_percentage: getGenderPercentage(demographics, "m"),
                     female_percentage: getGenderPercentage(demographics, "w"),
-                    case_history: getCaseHistory(cases, extendedDataAvailable),
+                    case_history: getCaseHistory(cases, regionType !== "state"),
                     age_groups: getAgeGroups(demographics),
                     recovery_time: RECOVERY_TIME,
                 }
@@ -147,10 +149,13 @@ function getGenderPercentage(demographics: DemographicData[], gender: string): n
             infected_gender += demographic.infected_total;
         }            
     });
+    if (infected_total == 0) {
+        return 0;
+    }
     return Math.round((infected_gender / infected_total) * 100);
 }
 
-function getCaseHistory(cases: CaseData[], extendedDataAvailable: boolean): CaseHistory[] {
+function getCaseHistory(cases: CaseData[], canCalculateRecoveries: boolean): CaseHistory[] {
     const result = [];
     for (let i = 0; i < cases.length; i++) {
         const formattedDate = formatDate(cases[i].date_day, "dd.MM", "de_DE");
@@ -174,7 +179,7 @@ function getCaseHistory(cases: CaseData[], extendedDataAvailable: boolean): Case
             });
         }
     }
-    if (cases.length > 0 && extendedDataAvailable) {
+    if (cases.length > 0 && canCalculateRecoveries) {
         calculateRecoveries(result, RECOVERY_TIME);
     }
     return result;

@@ -39,8 +39,10 @@ export class Assessment {
 
 }
 
+export type RegionType = "county" | "state" | "country";
+
 export interface RegionDetail {
-    extendedDataAvailable: boolean;
+    regionType: RegionType;
     name: string;
     county_id: string;
     population: number;
