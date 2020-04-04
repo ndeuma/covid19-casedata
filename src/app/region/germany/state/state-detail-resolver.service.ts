@@ -8,7 +8,7 @@ import { HealthService } from "src/app/health/health.service";
 import { RegionType } from "../../region-detail";
 
 @Injectable({
-    providedIn: "root",    
+    providedIn: "root",
 })
 export class StateDetailResolver implements Resolve<any> {
 
@@ -17,12 +17,12 @@ export class StateDetailResolver implements Resolve<any> {
         private readonly stateCaseService: StateCaseService,
         private readonly healthService: HealthService,
     ) { }
-    
+
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const stateCode = route.params.stateCode!;
-        const county_data = this.stateDetailService.getStateDetail(stateCode);
-        const case_data = this.stateCaseService.getStateCases(stateCode);        
-        return this.healthService.generateRegionDetail(county_data, case_data, of([]), "state");
+        const stateCode = route.params.stateCode;
+        const stateData = this.stateDetailService.getStateDetail(stateCode);
+        const caseData = this.stateCaseService.getStateCases(stateCode);
+        return this.healthService.generateRegionDetail(stateData, caseData, of([]), "state");
     }
-    
+
 }

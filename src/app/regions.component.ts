@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-@Component({    
-    selector: 'casedata-regions',
-    templateUrl: './regions.component.html',    
+@Component({
+    selector: "casedata-regions",
+    templateUrl: "./regions.component.html",
 })
 export class RegionsComponent { }

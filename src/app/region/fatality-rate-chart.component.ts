@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { RegionDetail } from './region-detail';
+import { RegionDetail } from "./region-detail";
 import { Chart } from "chart.js";
 
 @Component({
@@ -19,15 +19,16 @@ export class FatalityRateChartComponent implements OnChanges {
 
     private drawChart(): void {
         const ctx = document.getElementById("fatalityRateChart");
+        // tslint:disable-next-line: no-unused-expression
         new Chart(ctx, {
-            type: 'bar',
+            type: "bar",
             data: {
                 labels: this.regionDetail.age_groups.map(a => a.range),
                 datasets: [{
                     label: "Todesfälle",
                     data: this.regionDetail.age_groups.map(h => h.deaths_total),
                     backgroundColor: this.regionDetail.age_groups.map(h => "#000000"),
-                    borderColor: this.regionDetail.age_groups.map(h => "#000000"),                        
+                    borderColor: this.regionDetail.age_groups.map(h => "#000000"),
                     borderWidth: 1
                 }, {
                     // Total bar height should be number of infected, not number of infected + number of deaths here
@@ -35,7 +36,7 @@ export class FatalityRateChartComponent implements OnChanges {
                     label: "Fälle",
                     data: this.regionDetail.age_groups.map(h => h.infected_total - h.deaths_total),
                     backgroundColor: this.regionDetail.age_groups.map(h => "#0080ff"),
-                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),                        
+                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),
                     borderWidth: 1
                 }]
             },
@@ -61,6 +62,7 @@ export class FatalityRateChartComponent implements OnChanges {
                     }
                 },
                 tooltips: {
+                    // tslint:disable-next-line: max-line-length
                     // https://stackoverflow.com/questions/43793622/how-to-remove-square-label-from-tooltip-and-make-its-information-in-one-line
                     custom: (tooltip) => {
                         if (!tooltip) {
@@ -69,18 +71,18 @@ export class FatalityRateChartComponent implements OnChanges {
                         // Disable displaying the color box;
                         tooltip.displayColors = false;
                     },
-                    callbacks: {                        
+                    callbacks: {
                         label: (tooltipItem, data) => {
-                            const current_dead = data.datasets[0].data[tooltipItem.index];
-                            const current_infected = current_dead + data.datasets[1].data[tooltipItem.index];
+                            const currentDead = data.datasets[0].data[tooltipItem.index];
+                            const currentInfected = currentDead + data.datasets[1].data[tooltipItem.index];
                             return [
-                                `${data.datasets[1].label}: ${current_infected}`,
-                                `${data.datasets[0].label}: ${current_dead} (${Math.round((current_dead / current_infected) * 100)}%)`,
+                                `${data.datasets[1].label}: ${currentInfected}`,
+                                `${data.datasets[0].label}: ${currentDead} (${Math.round((currentDead / currentInfected) * 100)}%)`,
                             ];
-                        }                         
-                    } 
+                        }
+                    }
                 }
             }
-        });        
+        });
     }
 }

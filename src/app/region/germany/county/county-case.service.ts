@@ -1,9 +1,8 @@
-import { CaseData } from '../../case-data.to';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { RegionData } from '../../region-data.to';
-import { COUNTY_GERMANY_HOST, COUNTY_GERMANY_API } from 'src/app/deployment';
+import { CaseData } from "../../case-data.to";
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { COUNTY_GERMANY_HOST, COUNTY_GERMANY_API } from "src/app/deployment";
 
 @Injectable({
     providedIn: "root"

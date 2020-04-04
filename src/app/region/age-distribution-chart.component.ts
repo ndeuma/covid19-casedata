@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { RegionDetail } from './region-detail';
+import { RegionDetail } from "./region-detail";
 import { Chart } from "chart.js";
 
 @Component({
@@ -18,22 +18,23 @@ export class AgeDistributionChartComponent implements OnChanges {
     }
 
     private drawChart(): void {
-        const ctx = document.getElementById("ageDistributionChart");    
+        const ctx = document.getElementById("ageDistributionChart");
+        // tslint:disable-next-line: no-unused-expression
         new Chart(ctx, {
-            type: 'bar',
+            type: "bar",
             data: {
                 labels: this.regionDetail.age_groups.map(a => a.range),
                 datasets: [{
-                    label: 'männlich',
+                    label: "männlich",
                     data: this.regionDetail.age_groups.map(h => h.infected_male),
                     backgroundColor: this.regionDetail.age_groups.map(h => "#0080ff"),
-                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),                        
+                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),
                     borderWidth: 1
                 }, {
-                    label: 'weiblich',
+                    label: "weiblich",
                     data: this.regionDetail.age_groups.map(h => h.infected_female),
                     backgroundColor: this.regionDetail.age_groups.map(h => "#20ff00"),
-                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),                        
+                    borderColor: this.regionDetail.age_groups.map(h => "#a0a0a0"),
                     borderWidth: 1
                 }]
             },
@@ -43,18 +44,18 @@ export class AgeDistributionChartComponent implements OnChanges {
                         ticks: {
                             beginAtZero: true,
                             // https://stackoverflow.com/questions/42135058/set-minimum-step-size-in-chart-js
-                            callback: function(value, index, values) {
+                            callback: (value: number, index: any, values: any) => {
                                 if (Math.floor(value) === value) {
                                     return value;
                                 }
                             }
                         }
                     }]
-                },       
+                },
                 legend: {
                     position: "bottom"
-                }         
+                }
             }
-        });        
+        });
     }
 }

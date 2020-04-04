@@ -1,6 +1,3 @@
-import { NumberSymbol } from '@angular/common';
-import { GroupedObservable } from 'rxjs';
-
 export interface AgeGroup {
     range: string;
     infected_total: number;
@@ -31,8 +28,8 @@ export class Assessment {
     static readonly EXTREMELY_BAD = new Assessment("extremely-high", "extrem hoch", "extrem schlecht", "schnell steiler werdend");
 
     private constructor(
-        readonly displayClass: string, 
-        readonly labelForIncidence: string, 
+        readonly displayClass: string,
+        readonly labelForIncidence: string,
         readonly labelForTrend: string,
         readonly labelForCurve: string,
     ) { }
@@ -40,7 +37,6 @@ export class Assessment {
 }
 
 export type RegionType = "county" | "state" | "country";
-
 export interface RegionDetail {
     regionType: RegionType;
     name: string;
@@ -54,11 +50,11 @@ export interface RegionDetail {
     trendAssessment: Assessment | undefined;
     regression: number;
     regressionAssessment: Assessment;
-    deaths_total: number;    
+    deaths_total: number;
     new_cases: number;
     male_percentage: number;
-    female_percentage: number;    
+    female_percentage: number;
     case_history: CaseHistory[];
     age_groups: AgeGroup[];
-    recovery_time: number;        
+    recovery_time: number;
 }
