@@ -11,8 +11,6 @@ import { formatDate } from "@angular/common";
 import * as moment from "moment";
 import regression from "regression";
 
-
-
 const PREDEFINED_AGE_GROUPS = ["0-4", "5-14", "15-34", "35-59", "60-79", "80+"];
 
 // Estimated recovery time in days
@@ -24,20 +22,20 @@ const RECOVERY_TIME = 21;
 export class HealthService {
 
     generateRegionDetail(
-        county_data: Observable<RegionData>, 
-        case_data: Observable<CaseData[]>, 
-        demographic_data: Observable<DemographicData[]>,
+        regionData: Observable<RegionData>,
+        caseData: Observable<CaseData[]>,
+        demographicData: Observable<DemographicData[]>,
         regionType: RegionType
     ): Observable<RegionDetail> {
-        return combineLatest(county_data, case_data, demographic_data).pipe(
-            map(([county, cases, demographics]) => { 
-                const result = {               
-                    regionType: regionType, 
+        return combineLatest([regionData, caseData, demographicData]).pipe(
+            map(([county, cases, demographics]) => {
+                const result = {
+                    regionType: regionType,
                     name: county.gen + " (" + county.bez + ")",
                     county_id: county.ags,
                     population: county.population,
                     latest_report_date: cases.length > 0 ? formatDate(cases[0].date_day, "dd.MM.yy", "de_DE") : "",
-                    infected_total: cases.length > 0 ? cases[0].infected_total : 0,                    
+                    infected_total: cases.length > 0 ? cases[0].infected_total : 0,
                     infected_by_100k: undefined,
                     incidenceAssessment: undefined,
                     trend: getTrend(cases),
@@ -51,28 +49,28 @@ export class HealthService {
                     case_history: getCaseHistory(cases, regionType !== "state"),
                     age_groups: getAgeGroups(demographics),
                     recovery_time: RECOVERY_TIME,
-                }
+                };
                 result.infected_by_100k = Math.round((result.infected_total / result.population) * 100000);
                 result.incidenceAssessment = getIncidenceAssessment(result.infected_by_100k);
                 result.trendAssessment = getTrendAssessment(result.trend);
-                result.regressionAssessment = getRegressionAssessment(result.regression);
+                result.regressionAssessment = getCurveAssessment(result.regression);
                 return result;
             })
         );
     }
 }
 
-function getIncidenceAssessment(infected_by_100k: number): Assessment {
+function getIncidenceAssessment(infectedBy100k: number): Assessment {
     // Incidence classification similar to corona.rki.de
-    if (infected_by_100k < 59) {
+    if (infectedBy100k < 59) {
         return Assessment.VERY_GOOD;
-    } else if (infected_by_100k < 104) {
+    } else if (infectedBy100k < 104) {
         return Assessment.GOOD;
-    } else if (infected_by_100k < 166) {
+    } else if (infectedBy100k < 166) {
         return Assessment.MEDIUM;
-    } else if (infected_by_100k < 287) {
+    } else if (infectedBy100k < 287) {
         return Assessment.BAD;
-    } else if (infected_by_100k < 552) {
+    } else if (infectedBy100k < 552) {
         return Assessment.VERY_BAD;
     } else {
         return Assessment.EXTREMELY_BAD;
@@ -83,10 +81,10 @@ function getTrend(cases: CaseData[]): number {
     if (cases.length === 0) {
         return undefined;
     }
-    const latest_case_data = cases[0];
-    const base_date = moment(latest_case_data.date_day).subtract(7, "days");        
-    const base_case_data = cases.find(c => moment(c.date_day).isSameOrBefore(base_date));
-    return base_case_data ? (latest_case_data.infected_total / base_case_data.infected_total) : undefined;
+    const latestCaseData = cases[0];
+    const baseDate = moment(latestCaseData.date_day).subtract(7, "days");
+    const baseCaseData = cases.find(c => moment(c.date_day).isSameOrBefore(baseDate));
+    return baseCaseData ? (latestCaseData.infected_total / baseCaseData.infected_total) : undefined;
 }
 
 function getTrendAssessment(trend: number): Assessment {
@@ -105,32 +103,38 @@ function getTrendAssessment(trend: number): Assessment {
     }
 }
 
-function getRegressionAssessment(regression: number): Assessment {
-    if (regression < -0.4) {
+function getCurveAssessment(secondDerivative: number): Assessment {
+    if (secondDerivative < -0.4) {
         return Assessment.VERY_GOOD;
-    } else if (regression < 0) {
+    } else if (secondDerivative < 0) {
         return Assessment.GOOD;
-    } else if (regression < 0.1) {
+    } else if (secondDerivative < 0.1) {
         return Assessment.MEDIUM;
-    } else if (regression < 0.3) {
+    } else if (secondDerivative < 0.3) {
         return Assessment.BAD;
-    } else if (regression < 0.5) {
+    } else if (secondDerivative < 0.5) {
         return Assessment.VERY_BAD;
     } else {
         return Assessment.EXTREMELY_BAD;
     }
 }
 
-function getRegression(cases: CaseData[]): number {    
-    const latest_case_data = cases[0];    
-    const normalizationFactor = cases[0].infected_total / 100;
-    const base_date = moment(latest_case_data.date_day).subtract(7, "days");        
-    const input = cases.filter((c) => moment(c.date_day).isAfter(base_date)).reverse().map((c, idx) => [idx, c.infected_total / normalizationFactor]);    
-    if (input.length < 3) {
-        return 0;
+function getRegression(cases: CaseData[]): number {
+    if (cases.length > 0) {
+        const latestCaseData = cases[0];
+        const normalizationFactor = cases[0].infected_total / 100;
+        const baseDate = moment(latestCaseData.date_day).subtract(7, "days");
+        const input = cases
+            .filter((c) => moment(c.date_day).isAfter(baseDate))
+            .reverse()
+            .map((c, idx) => [idx, c.infected_total / normalizationFactor]);
+        if (input.length > 2) {
+            const regr = regression.polynomial(input, { order: 2});
+            return regr.equation[0];
+        }
     }
-    const regr = regression.polynomial(input, { order: 2});     
-    return regr.equation[0];
+
+    return 0;
 }
 
 function getNumberOfNewCases(cases: CaseData[]): number {
@@ -142,24 +146,24 @@ function getNumberOfNewCases(cases: CaseData[]): number {
 }
 
 function getGenderPercentage(demographics: DemographicData[], gender: string): number {
-    let infected_gender = 0, infected_total = 0;      
-    demographics.forEach((demographic) => {      
-        infected_total += demographic.infected_total;
+    let infectedWithGender = 0;
+    let infectedTotal = 0;
+    demographics.forEach((demographic) => {
+        infectedTotal += demographic.infected_total;
         if (demographic.gender === gender) {
-            infected_gender += demographic.infected_total;
-        }            
+            infectedWithGender += demographic.infected_total;
+        }
     });
-    if (infected_total == 0) {
+    if (infectedTotal === 0) {
         return 0;
     }
-    return Math.round((infected_gender / infected_total) * 100);
+    return Math.round((infectedWithGender / infectedTotal) * 100);
 }
 
 function getCaseHistory(cases: CaseData[], canCalculateRecoveries: boolean): CaseHistory[] {
     const result = [];
     for (let i = 0; i < cases.length; i++) {
-        const formattedDate = formatDate(cases[i].date_day, "dd.MM", "de_DE");
-        if (i == cases.length - 1) {                
+        if (i === cases.length - 1) {
             result.push({
                 date: cases[i].date_day,
                 infected_total: cases[i].infected_total,
@@ -186,11 +190,11 @@ function getCaseHistory(cases: CaseData[], canCalculateRecoveries: boolean): Cas
 }
 
 export function calculateRecoveries(result: CaseHistory[], recoveryTime: number) {
-    const deaths_at_end = result[0].deaths_total;
+    const deathsNow = result[0].deaths_total;
     for (let i = 0; i < result.length; i++) {
         const indexForDaysAgo = getIndexForDaysAgo(result, i, recoveryTime);
-        if (indexForDaysAgo != -1) {
-            result[i].recoveries_total = Math.max(0, result[indexForDaysAgo].infected_total - deaths_at_end);
+        if (indexForDaysAgo !== -1) {
+            result[i].recoveries_total = Math.max(0, result[indexForDaysAgo].infected_total - deathsNow);
         } else {
             result[i].recoveries_total = 0;
         }
@@ -208,42 +212,42 @@ function getIndexForDaysAgo(result: CaseHistory[], currentIndex: number, recover
 }
 
 function getAgeGroups(demographics: DemographicData[]): AgeGroup[] {
-    const infected_by_group = new Map();
-    const dead_by_group = new Map();
-    const infected_by_group_male = new Map();
-    const dead_by_group_male = new Map();
-    const infected_by_group_female = new Map();
-    const dead_by_group_female = new Map();
+    const infectedByGroup = new Map();
+    const deadByGroup = new Map();
+    const infectedByGroupMale = new Map();
+    const deadByGroupMale = new Map();
+    const infectedByGroupFemale = new Map();
+    const deadByGroupFemale = new Map();
     demographics.forEach(demographic => {
         const age_group = demographic.age_group;
-        updateMap(infected_by_group, age_group, demographic.infected_total);
-        updateMap(dead_by_group, age_group, demographic.deaths_total);
+        updateMap(infectedByGroup, age_group, demographic.infected_total);
+        updateMap(deadByGroup, age_group, demographic.deaths_total);
         if (demographic.gender === "m") {
-            updateMap(infected_by_group_male, age_group, demographic.infected_total);
-            updateMap(dead_by_group_male, age_group, demographic.deaths_total);
+            updateMap(infectedByGroupMale, age_group, demographic.infected_total);
+            updateMap(deadByGroupMale, age_group, demographic.deaths_total);
         }
         if (demographic.gender === "w") {
-            updateMap(infected_by_group_female, age_group, demographic.infected_total);
-            updateMap(dead_by_group_female, age_group, demographic.deaths_total);
+            updateMap(infectedByGroupFemale, age_group, demographic.infected_total);
+            updateMap(deadByGroupFemale, age_group, demographic.deaths_total);
         }
-    });                
-    return PREDEFINED_AGE_GROUPS.map((p) => { 
+    });
+    return PREDEFINED_AGE_GROUPS.map((p) => {
         return {
             range: p,
-            infected_total: infected_by_group.get(p) ?? 0,
-            deaths_total: dead_by_group.get(p) ?? 0,
-            infected_male: infected_by_group_male.get(p) ?? 0,
-            infected_female: infected_by_group_female.get(p) ?? 0,
-            deaths_male: dead_by_group_male.get(p) ?? 0,
-            deaths_female: dead_by_group_female.get(p) ?? 0,
-        }
+            infected_total: infectedByGroup.get(p) ?? 0,
+            deaths_total: deadByGroup.get(p) ?? 0,
+            infected_male: infectedByGroupMale.get(p) ?? 0,
+            infected_female: infectedByGroupFemale.get(p) ?? 0,
+            deaths_male: deadByGroupMale.get(p) ?? 0,
+            deaths_female: deadByGroupFemale.get(p) ?? 0,
+        };
     });
 }
 
-function updateMap(map: any, age_group: string, value: number) {
-    if (map.has(age_group)) {
-        map.set(age_group, map.get(age_group) + value);
+function updateMap(numbersByAgeGroup: any, ageGroup: string, value: number) {
+    if (numbersByAgeGroup.has(ageGroup)) {
+        numbersByAgeGroup.set(ageGroup, numbersByAgeGroup.get(ageGroup) + value);
     } else {
-        map.set(age_group, value);
+        numbersByAgeGroup.set(ageGroup, value);
     }
-}    
+}
