@@ -1,0 +1,17 @@
+<div class="case-stats">
+    <div class="case-stat-cell male">
+        <i class="fas fa-mars"></i>
+        <em *ngIf="regionDetail.regionType === 'county'">{{regionDetail.male_percentage}}%</em>
+        <em *ngIf="regionDetail.regionType !== 'county'">nicht verfügbar</em>
+    </div>
+    <div class="case-stat-cell female">
+        <i class="fas fa-venus"></i>
+        <em *ngIf="regionDetail.regionType === 'county'">{{regionDetail.female_percentage}}%</em>
+        <em *ngIf="regionDetail.regionType !== 'county'">nicht verfügbar</em>
+    </div>
+    <div class="case-stat-cell deaths">
+        <i class="fas fa-cross"></i>
+        <em *ngIf="regionDetail.regionType !== 'state'">{{regionDetail.deaths_total | number:'.0':'de-DE' }}</em>
+        <em *ngIf="regionDetail.regionType === 'state'">nicht verfügbar</em>
+    </div>
+</div>

@@ -19,12 +19,14 @@ import { CountyDemographicService } from "./region/germany/county/county-demogra
 import { StateDetailService } from "./region/germany/state/state-detail.service";
 import { StateCaseService } from "./region/germany/state/state-case.service";
 import { StateDetailResolver } from "./region/germany/state/state-detail-resolver.service";
+import { DemographicSummaryComponent } from "./region/demographic-summary.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     RegionsComponent,
     RegionDetailComponent,
+    DemographicSummaryComponent,
     HistoryChartComponent,
     FatalityRateChartComponent,
     AgeDistributionChartComponent
