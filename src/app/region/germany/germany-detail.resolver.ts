@@ -32,6 +32,7 @@ export class GermanyDetailResolver implements Resolve<RegionDetail> {
         // Cases and deaths numbers are from the situation report of the respective day and do not include
         // cases that are retroactively added in later days
         const caseData = of ([
+            { infected_total: 95391, deaths_total: 1434, date_day: "2020-04-06" },
             { infected_total: 91714, deaths_total: 1342, date_day: "2020-04-05" },
             { infected_total: 85778, deaths_total: 1158, date_day: "2020-04-04" },
             { infected_total: 79696, deaths_total: 1017, date_day: "2020-04-03" },
