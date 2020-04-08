@@ -14,7 +14,7 @@ import regression from "regression";
 const PREDEFINED_AGE_GROUPS = ["0-4", "5-14", "15-34", "35-59", "60-79", "80+"];
 
 // Estimated recovery time in days
-const RECOVERY_TIME = 21;
+const RECOVERY_TIME = 14;
 
 @Injectable({
     providedIn: "root"
