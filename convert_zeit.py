@@ -23,6 +23,17 @@ def downloadAndUnzip(jsonUrl):
             tempFile.write(unzippedBytes.decode("utf-8"))            
             print(f"Unzipped {zippedTempFileName} to {tempFileName}")
 
+# Sometimes the number of infected seems to be "null" for a date (especially the latest date)
+# In this case, use the number for the previous date.
+def replaceNull(array, index):
+    num = array[index]
+    if num is None and index > 0:
+        return array[index - 1]
+    elif num is None and index == 0:
+        return 0
+    else:
+        return num
+
 def convertCounty(county, metadata, lastUpdate):
     caseData = []
     # Do not append case numbers from currentStats - we might have two entries with the same date
@@ -35,11 +46,14 @@ def convertCounty(county, metadata, lastUpdate):
     #     "date_day": lastUpdateDate.strftime(DATE_FORMAT)
     # })
     historicalEndDate = datetime.strptime(metadata["historicalStats"]["end"], DATE_FORMAT)
+    print(f"Converting data for county {county['ags']}, latest date: {metadata['historicalStats']['end']}")
     length = len(county["historicalStats"]["count"])
     for i in range(0, length):
+        infected = replaceNull(county["historicalStats"]["count"], length - i - 1)
+        deaths = replaceNull(county["historicalStats"]["dead"], length - i - 1)        
         caseData.append({
-            "infected_total": county["historicalStats"]["count"][length - i - 1] or "0",
-            "deaths_total": county["historicalStats"]["dead"][length - i - 1] or "0",
+            "infected_total": infected,
+            "deaths_total": deaths or 0,
             "date_day": (historicalEndDate - timedelta(days=i)).strftime(DATE_FORMAT)
         })        
     return caseData
