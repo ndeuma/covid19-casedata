@@ -3,16 +3,17 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { COUNTY_GERMANY_HOST, COUNTY_GERMANY_API } from "src/app/deployment";
+import { BaseAwareHttpService } from "src/app/http/base-aware-http.service";
 
 @Injectable({
     providedIn: "root"
 })
 export class CountyCaseService {
 
-    constructor(private readonly http: HttpClient) { }
+    constructor(private readonly http: BaseAwareHttpService) { }
 
     public getCountyCases(countyId: string): Observable<CaseData[]> {
-        return this.http.get<CaseData[]>(`${COUNTY_GERMANY_HOST}${COUNTY_GERMANY_API}/county/${countyId}/cases/`);
+        return this.http.get<CaseData[]>(`data/${countyId}.json`);
     }
 
 }
