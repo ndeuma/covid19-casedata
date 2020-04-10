@@ -15,7 +15,7 @@ tempFileName = "zeit.json"
 
 def downloadAndUnzip(jsonUrl):
     print(f"Downloading ZEIT Online data to {zippedTempFileName}")
-    urllib.request.urlretrieve(downloadUrl, zippedTempFileName)
+    # urllib.request.urlretrieve(downloadUrl, zippedTempFileName)
     with gzip.open(zippedTempFileName) as zippedTempFile:
         unzippedBytes = zippedTempFile.read()
         print(f"Downloaded ZEIT Online data to {zippedTempFileName}")
@@ -62,8 +62,8 @@ def convert(jsonFileName):
     with open(jsonFileName) as jsonFile:
         zeitJson = json.load(jsonFile)       
         for county in zeitJson["kreise"]["items"]:
-            caseData = convertCounty(county, zeitJson["kreise"]["meta"], zeitJson["lastUpdate"])
-            caseDataFileName = f"{OUTPUT_DIR}/0{county['ags']}.json"
+            caseData = convertCounty(county, zeitJson["kreise"]["meta"], zeitJson["lastUpdate"])            
+            caseDataFileName = f"{OUTPUT_DIR}/{'{:0>5}'.format(county['ags'])}.json"
             with open(caseDataFileName, "w") as caseDataFile:
                 caseDataFile.write(json.dumps(caseData))
                 print(f"Wrote case data file {caseDataFileName}")
