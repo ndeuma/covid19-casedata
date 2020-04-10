@@ -37,16 +37,6 @@ import { DemographicSummaryComponent } from "./region/demographic-summary.compon
     AppRoutingModule
   ],
   providers: [
-    HealthService,
-    // German counties
-    CountyDetailService,
-    CountyCaseService,
-    CountyDemographicService,
-    CountyDetailResolver,
-    // German states
-    StateDetailService,
-    StateCaseService,
-    StateDetailResolver,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [
