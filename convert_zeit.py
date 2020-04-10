@@ -15,7 +15,7 @@ tempFileName = "zeit.json"
 
 def downloadAndUnzip(jsonUrl):
     print(f"Downloading ZEIT Online data to {zippedTempFileName}")
-    # urllib.request.urlretrieve(downloadUrl, zippedTempFileName)
+    urllib.request.urlretrieve(downloadUrl, zippedTempFileName)
     with gzip.open(zippedTempFileName) as zippedTempFile:
         unzippedBytes = zippedTempFile.read()
         print(f"Downloaded ZEIT Online data to {zippedTempFileName}")
