@@ -38,17 +38,5 @@
       <em>Achtung:</em> Für Bundesländer werden nur die reinen Fallzahlen angezeigt, keine Todesfälle, keine Genesungen, und keine Geschlechter-/Altersverteilung.
     </ng-container>
   </div>
-  <div class="chart case-history" *ngIf="regionDetail.regionType === 'county' && regionDetail.deaths_total > 0">
-    <h2>Fälle und Todesfälle nach Alter</h2>
-    <div class="chart-data">
-      <casedata-fatality-rate-chart [regionDetail]="regionDetail"></casedata-fatality-rate-chart>             
-    </div>
-  </div>
-  <div class="chart case-history" *ngIf="regionDetail.regionType === 'county'">
-    <h2>Fälle nach Alter und Geschlecht</h2>
-    <div class="chart-data">
-      <casedata-age-distribution-chart [regionDetail]="regionDetail"></casedata-age-distribution-chart>             
-    </div>
-  </div>
 </div>
 
