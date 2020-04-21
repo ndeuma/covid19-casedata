@@ -3,6 +3,7 @@
 from datetime import datetime, date, time, timezone, timedelta
 import gzip
 import json
+import math
 import urllib.request
 
 DATE_FORMAT = "%Y-%m-%d"
@@ -26,10 +27,11 @@ def downloadAndUnzip(jsonUrl):
 # Sometimes the number of infected seems to be "null" for a date (especially the latest date)
 # In this case, use the number for the previous date.
 def replaceNull(array, index):
-    num = array[index]
-    if num is None and index > 0:
-        return array[index - 1]
-    elif num is None and index == 0:
+    adjustedIndex = min(index, len(array) - 1)
+    num = array[adjustedIndex]
+    if num is None and adjustedIndex > 0:
+        return array[adjustedIndex - 1]
+    elif num is None and adjustedIndex == 0:
         return 0
     else:
         return num
