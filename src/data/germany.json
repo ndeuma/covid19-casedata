@@ -1,4 +1,5 @@
 [
+    { "infected_total": 155193, "deaths_total": 5750, "date_day": "2020-04-27"},
     { "infected_total": 154175, "deaths_total": 5640, "date_day": "2020-04-26"},
     { "infected_total": 152438, "deaths_total": 5500, "date_day": "2020-04-25"},
     { "infected_total": 150383, "deaths_total": 5321, "date_day": "2020-04-24"},
