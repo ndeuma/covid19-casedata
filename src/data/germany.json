@@ -1,4 +1,10 @@
 [
+    { "infected_total": 178281, "deaths_total": 8247, "date_day": "2020-05-24"},
+    { "infected_total": 177850, "deaths_total": 8216, "date_day": "2020-05-23"},
+    { "infected_total": 177212, "deaths_total": 8174, "date_day": "2020-05-22"},
+    { "infected_total": 176752, "deaths_total": 8147, "date_day": "2020-05-21"},
+    { "infected_total": 176007, "deaths_total": 8090, "date_day": "2020-05-20"},
+    { "infected_total": 175210, "deaths_total": 8007, "date_day": "2020-05-19"},
     { "infected_total": 174697, "deaths_total": 7935, "date_day": "2020-05-18"},
     { "infected_total": 174355, "deaths_total": 7914, "date_day": "2020-05-17"},
     { "infected_total": 173772, "deaths_total": 7881, "date_day": "2020-05-16"},
